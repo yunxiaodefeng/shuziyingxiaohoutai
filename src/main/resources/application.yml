@@ -143,6 +143,6 @@ gen:
   # 默认生成包路径 system 需改成自己的模块名称 如 system monitor tool
   packageName: com.ruoyi.project.mbkj
   # 自动去除表前缀，默认是true
-  autoRemovePre: true
+  autoRemovePre: false
   # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）
-  tablePrefix: sys_
+  tablePrefix: sys_,client_,kpi_,st_,sys_,system_,weixin_,
