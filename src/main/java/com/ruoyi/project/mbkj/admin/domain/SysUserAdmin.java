@@ -20,16 +20,44 @@ public class SysUserAdmin extends BaseEntity
 
     /** id */
     private Long id;
+    
+    /** 员工工号 */
+    @Excel(name = "员工工号")
+    private String code;
 
     /** 用户名称 */
-    @Excel(name = "用户名称")
+    @Excel(name = "员工名称")
     private String username;
     
-    @Excel(name = "性别")
+    @Excel(name = "性别",readConverterExp = "0=未知,1=男,2=女")
     private String sex;
+    
+    /** 手机号 */
+    @Excel(name = "手机号")
+    private String phone;
+    
+    @Excel(name = "所属网点")
+    private String name;
+    
+    /** 岗位 */
+    @Excel(name = "岗位",readConverterExp = "1=员工,3=网点负责人,4=区县负责人")
+    private String jobid;
+    
+    /** 状态 */
+    @Excel(name = "状态", readConverterExp = "0=待审核,1=正常,3=离职")
+    private String status;
+  
 
-    /** 用户密码 */
-    @Excel(name = "用户密码")
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/** 用户密码 */
+   /* @Excel(name = "用户密码")*/
     private String password;
 
     public String getSex() {
@@ -39,41 +67,25 @@ public class SysUserAdmin extends BaseEntity
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-
-	/** 手机号 */
-    @Excel(name = "手机号")
-    private String phone;
-
+	
     /** 用户邮箱 */
-    @Excel(name = "用户邮箱")
+/*    @Excel(name = "用户邮箱")*/
     private String email;
 
     /** 用户组 */
-    @Excel(name = "用户组")
+   /* @Excel(name = "用户组")*/
     private Long roleid;
 
     /** null */
-    @Excel(name = "null")
+ /*   @Excel(name = "null")*/
     private String exchangerate;
 
     /** 所属网点 */
-    @Excel(name = "所属网点")
+    /*@Excel(name = "所属网点")*/
     private String storeid;
 
-    /** null */
-    @Excel(name = "null")
-    private String code;
-
-    /** 状态 */
-    @Excel(name = "状态")
-    private String status;
-
-    /** 岗位 */
-    @Excel(name = "岗位")
-    private String jobid;
-    
     /** 创建时间 */
-    @Excel(name = "创建时间")
+    /*@Excel(name = "创建时间")*/
     private Date createtime;
 
     public void setId(Long id)
@@ -192,6 +204,7 @@ public class SysUserAdmin extends BaseEntity
             .append("status", getStatus())
             .append("jobid", getJobid())
             .append("sex", getSex())
+            .append("name", getName())
             .toString();
     }
 

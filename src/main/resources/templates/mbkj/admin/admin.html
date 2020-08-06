@@ -10,55 +10,61 @@
                 <form id="formId">
                     <div class="select-list">
                         <ul>
+                          	<li>
+                                <label>工号：</label>
+                                <input type="text" name="code"/>
+                            </li>
                             <li>
-                                <label>用户名称：</label>
+                                <label>名称：</label>
                                 <input type="text" name="username"/>
                             </li>
-                            <li>
-                                <label>用户密码：</label>
-                                <input type="text" name="password"/>
+                            
+                             <li>
+                                <label>性别：</label>
+                                <select name="sex">
+                                    <option value="">所有</option>
+                                    <option value="1">男</option>
+                                    <option value="2">女</option>
+                                    <option value="0">未知</option>
+                                </select>
                             </li>
+                         
                             <li>
                                 <label>手机号：</label>
                                 <input type="text" name="phone"/>
                             </li>
-                            <li>
-                                <label>用户邮箱：</label>
-                                <input type="text" name="email"/>
-                            </li>
-                            <li class="select-time">
+                           
+                           <!--  <li class="select-time">
                                 <label>创建时间：</label>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreatetime]"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreatetime]"/>
-                            </li>
-                            <li>
-                                <label>用户组：</label>
-                                <input type="text" name="roleid"/>
-                            </li>
-                            <li>
-                                <label>null：</label>
-                                <input type="text" name="exchangerate"/>
-                            </li>
+                            </li> -->
+                           
+                            
                             <li>
                                 <label>所属网点：</label>
-                                <input type="text" name="storeid"/>
+                                <input type="text" name="name"/>
                             </li>
-                            <li>
-                                <label>null：</label>
-                                <input type="text" name="code"/>
+                         	 <li>
+                                <label>岗位：</label>
+                                 <select name="jobid">
+                                    <option value="">所有</option>
+                                    <option value="4">区县负责人</option>
+                                    <option value="3">网点负责人</option>
+                                    <option value="1">员工</option>
+                                </select>
                             </li>
                             <li>
                                 <label>状态：</label>
                                 <select name="status">
                                     <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
+                                    <option value="0">待审核</option>
+                                    <option value="1">正常</option>
+                                    <option value="3">离职</option>
                                 </select>
                             </li>
-                            <li>
-                                <label>岗位：</label>
-                                <input type="text" name="jobid"/>
-                            </li>
+                           
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -111,15 +117,30 @@
                 },
                 {
                     field: 'code',
-                    title: '员工工号'
+                    title: '员工工号',
+                    sortable:true
                 },
                 {
                     field: 'username',
-                    title: '员工名称'
+                    title: '员工名称',
+                    sortable:true
                 },
                 {
                     field: 'sex',
-                    title: '性别'
+                    title: '性别',
+                    formatter: function (value, row, index) {
+                        
+                        if (1 == value) {
+                            return "男";
+                        }
+                        if (2 == value) {
+                            return "女";
+                        }
+                        if (0 == value) {
+                            return "未知";
+                        }
+                    },
+                    sortable:true
                 },
                 /* {
                     field: 'password',
@@ -141,22 +162,49 @@
                     field: 'roleid',
                     title: '用户组'
                 }, */
-                {
+             /*    {
                     field: 'exchangerate',
                     title: 'null'
-                },
+                }, */
                 {
-                    field: 'storeid',
-                    title: '所属网点'
+                    field: 'name',
+                    title: '所属网点',
+                    sortable:true
                 },
               
-                {
-                    field: 'status',
-                    title: '状态'
-                },
+               
                 {
                     field: 'jobid',
-                    title: '岗位'
+                    title: '岗位',
+                    formatter: function (value, row, index) {
+                       
+                        if (1 == value) {
+                            return "员工";
+                        }
+                        if (3 == value) {
+                            return "网点负责人";
+                        }
+                        if (4 == value) {
+                            return "区县负责人";
+                        }
+                    },
+                    sortable:true
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        if (0 == value) {
+                            return "待审核";
+                        }
+                        if (1 == value) {
+                            return "正常";
+                        }
+                        if (3 == value) {
+                            return "离职";
+                        }
+                    },
+                    sortable:true
                 },
                 {
                     title: '操作',
