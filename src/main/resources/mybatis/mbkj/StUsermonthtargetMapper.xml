@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.usermonthtarget.mapper.StUsermonthtargetMapper">
+    
+    <resultMap type="StUsermonthtarget" id="StUsermonthtargetResult">
+        <result property="id"    column="id"    />
+        <result property="userid"    column="userid"    />
+        <result property="target"    column="target"    />
+        <result property="mytarget"    column="mytarget"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="markes"    column="markes"    />
+        <result property="storestid"    column="storestid"    />
+    </resultMap>
+
+    <sql id="selectStUsermonthtargetVo">
+        select id, userid, target, mytarget, createtime, markes, storestid from st_usermonthtarget
+    </sql>
+
+    <select id="selectStUsermonthtargetList" parameterType="StUsermonthtarget" resultMap="StUsermonthtargetResult">
+        <include refid="selectStUsermonthtargetVo"/>
+        <where>  
+            <if test="userid != null "> and userid = #{userid}</if>
+            <if test="target != null  and target != ''"> and target = #{target}</if>
+            <if test="mytarget != null  and mytarget != ''"> and mytarget = #{mytarget}</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+            <if test="markes != null  and markes != ''"> and markes = #{markes}</if>
+            <if test="storestid != null "> and storestid = #{storestid}</if>
+        </where>
+    </select>
+    
+    <select id="selectStUsermonthtargetById" parameterType="Long" resultMap="StUsermonthtargetResult">
+        <include refid="selectStUsermonthtargetVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertStUsermonthtarget" parameterType="StUsermonthtarget" useGeneratedKeys="true" keyProperty="id">
+        insert into st_usermonthtarget
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userid != null">userid,</if>
+            <if test="target != null">target,</if>
+            <if test="mytarget != null">mytarget,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="markes != null">markes,</if>
+            <if test="storestid != null">storestid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userid != null">#{userid},</if>
+            <if test="target != null">#{target},</if>
+            <if test="mytarget != null">#{mytarget},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="markes != null">#{markes},</if>
+            <if test="storestid != null">#{storestid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStUsermonthtarget" parameterType="StUsermonthtarget">
+        update st_usermonthtarget
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userid != null">userid = #{userid},</if>
+            <if test="target != null">target = #{target},</if>
+            <if test="mytarget != null">mytarget = #{mytarget},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+            <if test="markes != null">markes = #{markes},</if>
+            <if test="storestid != null">storestid = #{storestid},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStUsermonthtargetById" parameterType="Long">
+        delete from st_usermonthtarget where id = #{id}
+    </delete>
+
+    <delete id="deleteStUsermonthtargetByIds" parameterType="String">
+        delete from st_usermonthtarget where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

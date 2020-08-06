@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.store.mapper.SystemStoreMapper">
+    
+    <resultMap type="SystemStore" id="SystemStoreResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="status"    column="status"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="prentid"    column="prentid"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="county"    column="county"    />
+        <result property="area"    column="area"    />
+        <result property="address"    column="address"    />
+        <result property="code"    column="code"    />
+    </resultMap>
+
+    <sql id="selectSystemStoreVo">
+        select id, name, type, status, createtime, prentid, province, city, county, area, address, code from system_store
+    </sql>
+
+    <select id="selectSystemStoreList" parameterType="SystemStore" resultMap="SystemStoreResult">
+        <include refid="selectSystemStoreVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+            <if test="prentid != null "> and prentid = #{prentid}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="county != null  and county != ''"> and county = #{county}</if>
+            <if test="area != null  and area != ''"> and area = #{area}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+        </where>
+    </select>
+    
+    <select id="selectSystemStoreById" parameterType="Long" resultMap="SystemStoreResult">
+        <include refid="selectSystemStoreVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSystemStore" parameterType="SystemStore" useGeneratedKeys="true" keyProperty="id">
+        insert into system_store
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="type != null">type,</if>
+            <if test="status != null">status,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="prentid != null">prentid,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="county != null">county,</if>
+            <if test="area != null">area,</if>
+            <if test="address != null">address,</if>
+            <if test="code != null">code,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="type != null">#{type},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="prentid != null">#{prentid},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="county != null">#{county},</if>
+            <if test="area != null">#{area},</if>
+            <if test="address != null">#{address},</if>
+            <if test="code != null">#{code},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSystemStore" parameterType="SystemStore">
+        update system_store
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+            <if test="prentid != null">prentid = #{prentid},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="county != null">county = #{county},</if>
+            <if test="area != null">area = #{area},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="code != null">code = #{code},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSystemStoreById" parameterType="Long">
+        delete from system_store where id = #{id}
+    </delete>
+
+    <delete id="deleteSystemStoreByIds" parameterType="String">
+        delete from system_store where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
