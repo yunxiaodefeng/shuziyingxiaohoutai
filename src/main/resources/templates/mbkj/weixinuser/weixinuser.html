@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('微信用户列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>是否关注：</label>
+                                <input type="text" name="subscribe"/>
+                            </li>
+                            <li>
+                                <label>openid：</label>
+                                <input type="text" name="openid"/>
+                            </li>
+                            <li>
+                                <label>昵称：</label>
+                                <input type="text" name="nickname"/>
+                            </li>
+                            <li>
+                                <label>性别：</label>
+                                <select name="sex">
+                                    <option value="">所有</option>
+                                    <option value="-1">代码生成请选择字典属性</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>城市：</label>
+                                <input type="text" name="city"/>
+                            </li>
+                            <li>
+                                <label>国家：</label>
+                                <input type="text" name="country"/>
+                            </li>
+                            <li>
+                                <label>省份：</label>
+                                <input type="text" name="province"/>
+                            </li>
+                            <li>
+                                <label>语言：</label>
+                                <input type="text" name="language"/>
+                            </li>
+                            <li class="select-time">
+                                <label>用户关注时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSubscribeTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubscribeTime]"/>
+                            </li>
+                            <li>
+                                <label>unionid：</label>
+                                <input type="text" name="unionid"/>
+                            </li>
+                            <li>
+                                <label>分组：</label>
+                                <input type="text" name="groupid"/>
+                            </li>
+                            <li>
+                                <label>用户id：</label>
+                                <input type="text" name="userid"/>
+                            </li>
+                            <li>
+                                <label>头像：</label>
+                                <input type="text" name="headimgurl"/>
+                            </li>
+                            <li>
+                                <label>绑定手机号：</label>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <label>状态：</label>
+                                <select name="type">
+                                    <option value="">所有</option>
+                                    <option value="-1">代码生成请选择字典属性</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>备注  0系统人  1客户：</label>
+                                <select name="usertype">
+                                    <option value="">所有</option>
+                                    <option value="-1">代码生成请选择字典属性</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>null：</label>
+                                <input type="text" name="token"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="mbkj:weixinuser:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="mbkj:weixinuser:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="mbkj:weixinuser:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="mbkj:weixinuser:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('mbkj:weixinuser:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('mbkj:weixinuser:remove')}]];
+        var prefix = ctx + "mbkj/weixinuser";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "微信用户",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'subscribe',
+                    title: '是否关注'
+                },
+                {
+                    field: 'openid',
+                    title: 'openid'
+                },
+                {
+                    field: 'nickname',
+                    title: '昵称'
+                },
+                {
+                    field: 'sex',
+                    title: '性别'
+                },
+                {
+                    field: 'city',
+                    title: '城市'
+                },
+                {
+                    field: 'country',
+                    title: '国家'
+                },
+                {
+                    field: 'province',
+                    title: '省份'
+                },
+                {
+                    field: 'language',
+                    title: '语言'
+                },
+                {
+                    field: 'subscribeTime',
+                    title: '用户关注时间'
+                },
+                {
+                    field: 'unionid',
+                    title: 'unionid'
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
+                },
+                {
+                    field: 'groupid',
+                    title: '分组'
+                },
+                {
+                    field: 'userid',
+                    title: '用户id',
+                    sortable: true
+                },
+                {
+                    field: 'headimgurl',
+                    title: '头像'
+                },
+                {
+                    field: 'phone',
+                    title: '绑定手机号'
+                },
+                {
+                    field: 'type',
+                    title: '状态'
+                },
+                {
+                    field: 'usertype',
+                    title: '备注  0系统人  1客户'
+                },
+                {
+                    field: 'token',
+                    title: 'null'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.weixinuser.mapper.WeixinUserMapper">
+    
+    <resultMap type="WeixinUser" id="WeixinUserResult">
+        <result property="id"    column="id"    />
+        <result property="subscribe"    column="subscribe"    />
+        <result property="openid"    column="openid"    />
+        <result property="nickname"    column="nickname"    />
+        <result property="sex"    column="sex"    />
+        <result property="city"    column="city"    />
+        <result property="country"    column="country"    />
+        <result property="province"    column="province"    />
+        <result property="language"    column="language"    />
+        <result property="subscribeTime"    column="subscribe_time"    />
+        <result property="unionid"    column="unionid"    />
+        <result property="remark"    column="remark"    />
+        <result property="groupid"    column="groupid"    />
+        <result property="userid"    column="userid"    />
+        <result property="headimgurl"    column="headimgurl"    />
+        <result property="phone"    column="phone"    />
+        <result property="type"    column="type"    />
+        <result property="usertype"    column="usertype"    />
+        <result property="token"    column="token"    />
+    </resultMap>
+
+    <sql id="selectWeixinUserVo">
+        select id, subscribe, openid, nickname, sex, city, country, province, language, subscribe_time, unionid, remark, groupid, userid, headimgurl, phone, type, usertype, token from weixin_user
+    </sql>
+
+    <select id="selectWeixinUserList" parameterType="WeixinUser" resultMap="WeixinUserResult">
+        <include refid="selectWeixinUserVo"/>
+        <where>  
+            <if test="subscribe != null  and subscribe != ''"> and subscribe = #{subscribe}</if>
+            <if test="openid != null  and openid != ''"> and openid = #{openid}</if>
+            <if test="nickname != null  and nickname != ''"> and nickname like concat('%', #{nickname}, '%')</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="country != null  and country != ''"> and country = #{country}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="language != null  and language != ''"> and language = #{language}</if>
+            <if test="subscribeTime != null "> and subscribe_time = #{subscribeTime}</if>
+            <if test="unionid != null  and unionid != ''"> and unionid = #{unionid}</if>
+            <if test="groupid != null  and groupid != ''"> and groupid = #{groupid}</if>
+            <if test="userid != null  and userid != ''"> and userid = #{userid}</if>
+            <if test="headimgurl != null  and headimgurl != ''"> and headimgurl = #{headimgurl}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="usertype != null  and usertype != ''"> and usertype = #{usertype}</if>
+            <if test="token != null  and token != ''"> and token = #{token}</if>
+        </where>
+    </select>
+    
+    <select id="selectWeixinUserById" parameterType="Long" resultMap="WeixinUserResult">
+        <include refid="selectWeixinUserVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertWeixinUser" parameterType="WeixinUser" useGeneratedKeys="true" keyProperty="id">
+        insert into weixin_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subscribe != null">subscribe,</if>
+            <if test="openid != null">openid,</if>
+            <if test="nickname != null">nickname,</if>
+            <if test="sex != null">sex,</if>
+            <if test="city != null">city,</if>
+            <if test="country != null">country,</if>
+            <if test="province != null">province,</if>
+            <if test="language != null">language,</if>
+            <if test="subscribeTime != null">subscribe_time,</if>
+            <if test="unionid != null">unionid,</if>
+            <if test="remark != null">remark,</if>
+            <if test="groupid != null">groupid,</if>
+            <if test="userid != null">userid,</if>
+            <if test="headimgurl != null">headimgurl,</if>
+            <if test="phone != null">phone,</if>
+            <if test="type != null">type,</if>
+            <if test="usertype != null">usertype,</if>
+            <if test="token != null">token,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="subscribe != null">#{subscribe},</if>
+            <if test="openid != null">#{openid},</if>
+            <if test="nickname != null">#{nickname},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="city != null">#{city},</if>
+            <if test="country != null">#{country},</if>
+            <if test="province != null">#{province},</if>
+            <if test="language != null">#{language},</if>
+            <if test="subscribeTime != null">#{subscribeTime},</if>
+            <if test="unionid != null">#{unionid},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="groupid != null">#{groupid},</if>
+            <if test="userid != null">#{userid},</if>
+            <if test="headimgurl != null">#{headimgurl},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="type != null">#{type},</if>
+            <if test="usertype != null">#{usertype},</if>
+            <if test="token != null">#{token},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWeixinUser" parameterType="WeixinUser">
+        update weixin_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="subscribe != null">subscribe = #{subscribe},</if>
+            <if test="openid != null">openid = #{openid},</if>
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="country != null">country = #{country},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="language != null">language = #{language},</if>
+            <if test="subscribeTime != null">subscribe_time = #{subscribeTime},</if>
+            <if test="unionid != null">unionid = #{unionid},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="groupid != null">groupid = #{groupid},</if>
+            <if test="userid != null">userid = #{userid},</if>
+            <if test="headimgurl != null">headimgurl = #{headimgurl},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="usertype != null">usertype = #{usertype},</if>
+            <if test="token != null">token = #{token},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWeixinUserById" parameterType="Long">
+        delete from weixin_user where id = #{id}
+    </delete>
+
+    <delete id="deleteWeixinUserByIds" parameterType="String">
+        delete from weixin_user where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
