@@ -17,29 +17,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="code"    column="code"    />
         <result property="status"    column="status"    />
         <result property="jobid"    column="jobid"    />
+        <result property="sex"    column="sex"    />
     </resultMap>
 
     <sql id="selectSysUserAdminVo">
         select id, username, password, phone, email, createtime, roleid, exchangerate, storeid, code, status, jobid from sys_user_admin 
     </sql>
 
-    <select id="selectSysUserAdminList" parameterType="SysUserAdmin" resultMap="SysUserAdminResult">
+    <select id="selectSysUserAdminList" parameterType="SysUserAdmin" resultType="com.ruoyi.project.mbkj.admin.domain.SysUserAdmin">
     
-    select a.id, a.username,b.sex, a.password, a.phone, a.email, a.createtime, a.roleid, a.exchangerate, a.storeid, a.code, a.status, a.jobid from sys_user_admin a,weixin_user b
+    select a.id, a.username, a.password, a.phone, a.email, a.createtime, 
+    a.roleid, a.exchangerate, a.storeid, a.code, a.status, a.jobid 
+    
+    from sys_user_admin a 
         <where>  
-            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
-            <if test="password != null  and password != ''"> and password = #{password}</if>
-            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
-            <if test="email != null  and email != ''"> and email = #{email}</if>
-            <if test="createtime != null "> and createtime = #{createtime}</if>
-            <if test="roleid != null "> and roleid = #{roleid}</if>
-            <if test="exchangerate != null  and exchangerate != ''"> and exchangerate = #{exchangerate}</if>
-            <if test="storeid != null  and storeid != ''"> and storeid = #{storeid}</if>
-            <if test="code != null  and code != ''"> and code = #{code}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="jobid != null  and jobid != ''"> and jobid = #{jobid}</if>
+            <if test="a.username != null  and a.username != ''"> and a.username like concat('%', #{a.username}, '%')</if>
+            <if test="a.password != null  and a.password != ''"> and a.password = #{a.password}</if>
+            <if test="a.phone != null  and a.phone != ''"> and a.phone = #{a.phone}</if>
+            <if test="a.email != null  and a.email != ''"> and a.email = #{a.email}</if>
+            <if test="a.createtime != null "> and a.createtime = #{a.createtime}</if>
+            <if test="a.roleid != null "> and a.roleid = #{a.roleid}</if>
+            <if test="a.exchangerate != null  and a.exchangerate != ''"> and a.exchangerate = #{a.exchangerate}</if>
+            <if test="a.storeid != null  and a.storeid != ''"> and a.storeid = #{a.storeid}</if>
+            <if test="a.code != null  and a.code != ''"> and a.code = #{a.code}</if>
+            <if test="a.status != null  and a.status != ''"> and a.status = #{a.status}</if>
+            <if test="a.jobid != null  and a.jobid != ''"> and a.jobid = #{a.jobid}</if>
+            <if test="b.sex != null  and b.sex != ''"> and b.sex = #{b.sex}</if>
             
-            and a.id = b.userid
+             
         </where>
     </select>
     

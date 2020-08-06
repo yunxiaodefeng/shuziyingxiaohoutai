@@ -24,12 +24,23 @@ public class SysUserAdmin extends BaseEntity
     /** 用户名称 */
     @Excel(name = "用户名称")
     private String username;
+    
+    @Excel(name = "性别")
+    private String sex;
 
     /** 用户密码 */
     @Excel(name = "用户密码")
     private String password;
 
-    /** 手机号 */
+    public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	/** 手机号 */
     @Excel(name = "手机号")
     private String phone;
 
@@ -180,6 +191,7 @@ public class SysUserAdmin extends BaseEntity
             .append("code", getCode())
             .append("status", getStatus())
             .append("jobid", getJobid())
+            .append("sex", getSex())
             .toString();
     }
 
