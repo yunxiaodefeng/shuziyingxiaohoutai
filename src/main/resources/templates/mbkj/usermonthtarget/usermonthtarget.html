@@ -83,7 +83,17 @@
                 </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
+                <table class="table table-bordered table-hover">
+                	<thead>
+                		<tr id="header-item" ></tr>
+                	</thead>
+                	<tbody>
+                		<tr id="body-item">
+                			
+                		</tr>
+                	</tbody>
+                
+                </table>
             </div>
         </div>
     </div>
@@ -95,8 +105,52 @@
         var editFlag = [[${@permission.hasPermi('mbkj:usermonthtarget:edit')}]];
         var removeFlag = [[${@permission.hasPermi('mbkj:usermonthtarget:remove')}]];
         var prefix = ctx + "mbkj/usermonthtarget";
-
+        
+        var target = ctx + "mbkj/standard";
+        
+        var header = "<th><div class='th-inner sortable both' style='width:70px'>贡献</div></th><th><div class='th-inner sortable both' style='width:70px'>新建信息</div></th><th><div class='th-inner sortable both' style='width:70px'>完善信息</div></th><th><div class='th-inner sortable both' style='width:70px'>计划维护</div></th><th><div class='th-inner sortable both' style='width:70px'>跟进客户</div></th>";
+        
+        var jsonItem =[{
+            checkbox: true
+        },
+        {
+            field: 'id',
+            title: 'null',
+            visible: false
+        },
+        {
+            field: 'userid',
+            title: '贡献'
+        },
+        {
+            field: 'target',
+            title: '新建信息'
+        },
+        {
+            field: 'mytarget',
+            title: '完善信息'
+        },
+        {
+            field: 'mytarget',
+            title: '计划维护'
+        },
+        {
+            field: 'mytarget',
+            title: '跟进客户'
+        },{
+            title: '操作',
+            align: 'center',
+            formatter: function(value, row, index) {
+                var actions = [];
+                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                return actions.join('');
+            }
+        }];
+ 
         $(function() {
+        	getHeader();
+        	
         	var panehHidden = false;
    		    if ($(this).width() < 769) {
    		        panehHidden = true;
@@ -107,56 +161,57 @@
    		    
         });
         
+        function getHeader(){
+        	$.ajax({
+        		url:target + "/list",
+        		type:"POST",
+        		dataType:"Json",
+        		success:function(result){
+        			console.log("表头信息");
+        			
+        			var data = result.rows;
+        			
+        			for(var i=0;i < data.length;i++){
+        				var temp = "<th><div class='th-inner sortable both' style='width:80px'>";
+        				
+       				　　　temp = temp+ data[i].name +"</div></th>";
+       					header = header + temp;
+       				}
+        			console.log(header);
+       				$("#header-item").append(header);
+        			
+        		}
+        	})
+        }
+        
+        var tbody=""
+        function getBody(id,type){
+        	
+        	//1、查询类型：type:  
+        	//     0  查询所有网点、1 查询网点人员信息
+        	
+        	
+        	if(type=='0'){
+        		getGongxian(type);
+        		
+        	}else{
+        		getGongxian(type)
+        	}
+        	
+        	//   获取贡献指标输数值
+        	
+        	
+        }
+        
    		function queryUserList(){
             var options = {
-                url: prefix + "/list",
+                url: target + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "数据统计",
-                columns: [{
-                    checkbox: true
-                },
-                {
-                    field: 'id',
-                    title: 'null',
-                    visible: false
-                },
-                {
-                    field: 'userid',
-                    title: '用户id'
-                },
-                {
-                    field: 'target',
-                    title: '指标'
-                },
-                {
-                    field: 'mytarget',
-                    title: '已完成目标'
-                },
-                {
-                    field: 'createtime',
-                    title: '创建时间'
-                },
-                {
-                    field: 'markes',
-                    title: '备注'
-                },
-                {
-                    field: 'storestid',
-                    title: '网点指标'
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
-                    }
-                }]
+                columns:jsonItem,
             };
             $.table.init(options);
         }
@@ -174,7 +229,18 @@
 			function zOnClick(event, treeId, treeNode) {
 				$("#deptId").val(treeNode.id);
 				$("#parentId").val(treeNode.pId);
-				$.table.search();
+				
+				console.log(treeNode.id);
+				console.log(treeNode.pId);
+				if(treeNode.pId == null){
+					getBody(treeNode.id,0)
+				}else{
+					getBody(treeNode.id,1)
+				}
+				
+				/* $.ajax({
+					url:target + "/list",
+				}) */
 			}
 		}
 		
@@ -193,6 +259,81 @@
 		$('#btnRefresh').click(function() {
 			queryDeptTree();
 		});
+		
+		// -----------贡献------------
+		function getGongxian(type){
+			
+        	$.ajax({
+        		url:target + "/list",
+        		type:"POST",
+        		dataType:"Json",
+        		success:function(result){
+        			console.log("表头信息");
+        			
+        			var data = result.rows;
+        			
+        			for(var i=0;i < data.length;i++){
+        				var temp = "<th><div class='th-inner sortable both' style='width:80px'>";
+        				
+       				　　　temp = temp+ data[i].name +"</div></th>";
+       					header = header + temp;
+       				}
+        			console.log(header);
+       				$("#header-item").append(header);
+        			
+        		}
+        	})
+		}
+		
+		// -----------四个指标------------
+		function getFourTarget(){
+			
+        	$.ajax({
+        		url:target + "/list",
+        		type:"POST",
+        		dataType:"Json",
+        		success:function(result){
+        			console.log("表头信息");
+        			
+        			var data = result.rows;
+        			
+        			for(var i=0;i < data.length;i++){
+        				var temp = "<th><div class='th-inner sortable both' style='width:80px'>";
+        				
+       				　　　temp = temp+ data[i].name +"</div></th>";
+       					header = header + temp;
+       				}
+        			console.log(header);
+       				$("#header-item").append(header);
+        			
+        		}
+        	})
+		}
+		
+		// -----------其他指标------------
+		function getOtherTarget(){
+			
+        	$.ajax({
+        		url:target + "/list",
+        		type:"POST",
+        		dataType:"Json",
+        		success:function(result){
+        			console.log("表头信息");
+        			
+        			var data = result.rows;
+        			
+        			for(var i=0;i < data.length;i++){
+        				var temp = "<th><div class='th-inner sortable both' style='width:80px'>";
+        				
+       				　　　temp = temp+ data[i].name +"</div></th>";
+       					header = header + temp;
+       				}
+        			console.log(header);
+       				$("#header-item").append(header);
+        			
+        		}
+        	})
+		}
     </script>
 </body>
 </html>

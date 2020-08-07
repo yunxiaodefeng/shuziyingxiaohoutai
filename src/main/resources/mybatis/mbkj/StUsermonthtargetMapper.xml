@@ -17,6 +17,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectStUsermonthtargetVo">
         select id, userid, target, mytarget, createtime, markes, storestid from st_usermonthtarget
     </sql>
+    
+    
+     
 
     <select id="selectStUsermonthtargetList" parameterType="StUsermonthtarget" resultMap="StUsermonthtargetResult">
         <include refid="selectStUsermonthtargetVo"/>
@@ -28,6 +31,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="markes != null  and markes != ''"> and markes = #{markes}</if>
             <if test="storestid != null "> and storestid = #{storestid}</if>
         </where>
+    </select>
+    
+    <select id="selectStUsermonthtargetById" parameterType="Long" resultMap="StUsermonthtargetResult">
+        <include refid="selectStUsermonthtargetVo"/>
+        where id = #{id}
     </select>
     
     <select id="selectStUsermonthtargetById" parameterType="Long" resultMap="StUsermonthtargetResult">
