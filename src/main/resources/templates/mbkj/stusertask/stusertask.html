@@ -2,47 +2,45 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('存储设置的用户绩效列表')" />
+    <th:block th:include="include :: header('日期和时间')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
 </head>
 <body class="gray-bg">
+<div class="ui-layout-west">
+    <div class="box box-main">
+        <div class="box-header">
+            <div class="box-title">
+                <i class="fa icon-grid"></i> 组织机构
+            </div>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" id="btnExpand" title="展开" style="display:none;"><i class="fa fa-chevron-up"></i></button>
+                <button type="button" class="btn btn-box-tool" id="btnCollapse" title="折叠"><i class="fa fa-chevron-down"></i></button>
+                <button type="button" class="btn btn-box-tool" id="btnRefresh" title="刷新部门"><i class="fa fa-refresh"></i></button>
+            </div>
+        </div>
+        <div class="ui-layout-content">
+            <div id="tree" class="ztree"></div>
+        </div>
+    </div>
+</div>
+<div class="ui-layout-center">
      <div class="container-div">
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
+                    <input type="hidden" id="parentId" name="storeid">
                     <div class="select-list">
                         <ul>
-                            <li>
-                                <label>网点：</label>
-                                <input type="text" name="storeid"/>
-                            </li>
-                            <li>
-                                <label>员工id：</label>
-                                <input type="text" name="userid"/>
-                            </li>
-                            <li>
-                                <label>指标：</label>
-                                <input type="text" name="score"/>
-                            </li>
-                            <li>
+                            <li  class="form-group">
                                 <label>月份：</label>
-                                <input type="text" name="month"/>
+                                <div class="input-group date" style="width:300px;">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" name="time" id="datetimepicker-demo-2" placeholder="yyyy-MM">
+                                </div>
                             </li>
-                            <li class="select-time">
-                                <label>创建时间：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreatetime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreatetime]"/>
-                            </li>
-                            <li>
-                                <label>指标：</label>
-                                <input type="text" name="stid"/>
-                            </li>
-                            <li>
-                                <label>0权重 1目标 2积分：</label>
-                                <select name="type">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
-                            </li>
+
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -62,78 +60,135 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="mbkj:stusertask:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="mbkj:stusertask:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
+                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="mbkj:stusertask:export">-->
+                    <!--<i class="fa fa-download"></i> 导出-->
+                <!--</a>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
+     </div>
+     <th:block th:include="include :: footer" />
+     <th:block th:include="include :: datetimepicker-js" />
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('mbkj:stusertask:edit')}]];
         var removeFlag = [[${@permission.hasPermi('mbkj:stusertask:remove')}]];
         var prefix = ctx + "mbkj/stusertask";
 
-        $(function() {
+        $("#datetimepicker-demo-2").datetimepicker({
+            format: 'yyyy-mm',
+            weekStart: 1,
+            autoclose: true,
+            startView: 3,
+            minView: 3,
+            initialDate:new Date(),
+            forceParse: false,
+        });
+        $("#datetimepicker-demo-2").datetimepicker("setDate", new Date());
+        $(function () {
+            var panehHidden = false;
+            if ($(this).width() < 769) {
+                panehHidden = true;
+            }
+            $('body').layout({initClosed: panehHidden, west__size: 185});
+            queryList();
+            queryDeptTree();
+        });
+        $('#btnExpand').click(function () {
+            $._tree.expandAll(true);
+            $(this).hide();
+            $('#btnCollapse').show();
+        });
+
+        $('#btnCollapse').click(function () {
+            $._tree.expandAll(false);
+            $(this).hide();
+            $('#btnExpand').show();
+        });
+
+        $('#btnRefresh').click(function () {
+            queryDeptTree();
+        });
+        $('#btnRefresh').click(function() {
+            queryDeptTree();
+        });
+        function queryDeptTree() {
+            var url = ctx + "mbkj/store/treeData";
+            var options = {
+                url: url,
+                expandLevel: 2,
+                onClick: zOnClick
+            };
+            $.tree.init(options);
+
+            function zOnClick(event, treeId, treeNode) {
+                $("#deptId").val(treeNode.id);
+                $("#parentId").val(treeNode.id);
+                $.table.search();
+            }
+        }
+        function  queryList() {
+
+        } {
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "存储设置的用户绩效",
-                columns: [{
-                    checkbox: true
-                },
+                modalName: "绩效",
+                columns: [
+
                 {
                     field: 'id',
                     title: 'null',
                     visible: false
                 },
                 {
-                    field: 'storeid',
-                    title: '网点'
+                    field: 'username',
+                    title: '成员'
                 },
                 {
-                    field: 'userid',
-                    title: '员工id'
+                    field: 'totalscore',
+                    title: '绩效得分'
                 },
                 {
-                    field: 'score',
-                    title: '指标'
+                    field: 'paramvalue',
+                    title: '系数'
                 },
                 {
-                    field: 'month',
-                    title: '月份'
+                    field: 'price',
+                    title: '绩效单价'
                 },
                 {
-                    field: 'createtime',
-                    title: '创建时间'
+                    field: 'totalmoney',
+                    title: '绩效工资'
                 },
-                {
-                    field: 'stid',
-                    title: '指标'
-                },
-                {
-                    field: 'type',
-                    title: '0权重 1目标 2积分'
-                },
+
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="getBonusDetails(\'' + row.id + '\')"><i class="fa fa-edit"></i>绩效详情</a> ');
+//                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+//                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
             };
             $.table.init(options);
-        });
+        } ;
+
+        function  getBonusDetails(userid) {
+            var month=$("#datetimepicker-demo-2").val();
+            $.modal.open("绩效详情", prefix + "/check/"+userid+"/"+month);
+        }
+
     </script>
 </body>
 </html>

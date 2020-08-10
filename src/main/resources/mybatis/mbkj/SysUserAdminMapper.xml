@@ -24,6 +24,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, username, password, phone, email, createtime, roleid, exchangerate, storeid, code, status, jobid from sys_user_admin 
     </sql>
 
+    <select id="selectUserList" parameterType="map" resultType="com.ruoyi.project.mbkj.admin.domain.SysUserAdminBonus">
+
+        select a.*
+
+        from sys_user_admin a
+        <where>
+            (a.status=1 or a.status=3)
+            <if test="storeid != null  and storeid != ''"> and a.storeid = #{storeid}</if>
+        </where>
+    </select>
+
     <select id="selectSysUserAdminList" parameterType="SysUserAdmin" resultType="com.ruoyi.project.mbkj.admin.domain.SysUserAdmin">
     
     select a.id, a.username,b.sex,c.name, a.password, a.phone, a.email, a.createtime, 

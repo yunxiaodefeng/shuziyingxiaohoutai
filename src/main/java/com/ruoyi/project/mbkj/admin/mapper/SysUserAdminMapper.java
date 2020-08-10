@@ -1,7 +1,10 @@
 package com.ruoyi.project.mbkj.admin.mapper;
 
-import java.util.List;
 import com.ruoyi.project.mbkj.admin.domain.SysUserAdmin;
+import com.ruoyi.project.mbkj.admin.domain.SysUserAdminBonus;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 员工管理Mapper接口
@@ -58,4 +61,6 @@ public interface SysUserAdminMapper
      * @return 结果
      */
     public int deleteSysUserAdminByIds(String[] ids);
+
+    List<SysUserAdminBonus> selectUserList(Map<String, Object> userAdmin);
 }

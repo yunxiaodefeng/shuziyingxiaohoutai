@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.userparam.mapper.SystemUserparamMapper">
+    
+    <resultMap type="SystemUserparam" id="SystemUserparamResult">
+        <result property="id"    column="id"    />
+        <result property="userid"    column="userid"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="paramvalue"    column="paramvalue"    />
+        <result property="month"    column="month"    />
+    </resultMap>
+
+    <sql id="selectSystemUserparamVo">
+        select id, userid, createtime, paramvalue, month from system_userparam
+    </sql>
+
+    <select id="selectSystemUserparamList" parameterType="SystemUserparam" resultMap="SystemUserparamResult">
+        <include refid="selectSystemUserparamVo"/>
+        <where>  
+            <if test="userid != null "> and userid = #{userid}</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+            <if test="paramvalue != null  and paramvalue != ''"> and paramvalue = #{paramvalue}</if>
+            <if test="month != null  and month != ''"> and month = #{month}</if>
+        </where>
+    </select>
+    
+    <select id="selectSystemUserparamById" parameterType="Long" resultMap="SystemUserparamResult">
+        <include refid="selectSystemUserparamVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSystemUserparam" parameterType="SystemUserparam" useGeneratedKeys="true" keyProperty="id">
+        insert into system_userparam
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userid != null">userid,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="paramvalue != null">paramvalue,</if>
+            <if test="month != null">month,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userid != null">#{userid},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="paramvalue != null">#{paramvalue},</if>
+            <if test="month != null">#{month},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSystemUserparam" parameterType="SystemUserparam">
+        update system_userparam
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userid != null">userid = #{userid},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+            <if test="paramvalue != null">paramvalue = #{paramvalue},</if>
+            <if test="month != null">month = #{month},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSystemUserparamById" parameterType="Long">
+        delete from system_userparam where id = #{id}
+    </delete>
+
+    <delete id="deleteSystemUserparamByIds" parameterType="String">
+        delete from system_userparam where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

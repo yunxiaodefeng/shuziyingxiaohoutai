@@ -1,12 +1,11 @@
 package com.ruoyi.project.mbkj.usermonthtarget.domain;
 
-import java.util.Date;
-
+import com.ruoyi.framework.aspectj.lang.annotation.Excel;
+import com.ruoyi.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.ruoyi.framework.aspectj.lang.annotation.Excel;
-import com.ruoyi.framework.web.domain.BaseEntity;
+import java.util.Date;
 
 /**
  * 数据统计对象 st_usermonthtarget
@@ -43,7 +42,25 @@ public class StUsermonthtarget extends BaseEntity
     
     private Date createtime;
     
-    
+
+    private String time;
+    private String timeT;
+
+    public String getTimeT() {
+        return timeT;
+    }
+
+    public void setTimeT(String timeT) {
+        this.timeT = timeT;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public Date getCreatetime() {
 		return createtime;

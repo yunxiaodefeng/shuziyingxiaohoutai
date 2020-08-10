@@ -1,7 +1,10 @@
 package com.ruoyi.project.mbkj.stusertask.mapper;
 
-import java.util.List;
+import com.github.pagehelper.Page;
 import com.ruoyi.project.mbkj.stusertask.domain.StUserTask;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 存储设置的用户绩效Mapper接口
@@ -58,4 +61,6 @@ public interface StUserTaskMapper
      * @return 结果
      */
     public int deleteStUserTaskByIds(String[] ids);
+
+    Page<Map> selectList(Map<String, Object> map);
 }

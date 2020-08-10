@@ -1,7 +1,9 @@
 package com.ruoyi.project.mbkj.admin.service;
 
-import java.util.List;
 import com.ruoyi.project.mbkj.admin.domain.SysUserAdmin;
+import com.ruoyi.project.mbkj.admin.domain.SysUserAdminBonus;
+
+import java.util.List;
 
 /**
  * 员工管理Service接口
@@ -58,4 +60,6 @@ public interface ISysUserAdminService
      * @return 结果
      */
     public int deleteSysUserAdminById(Long id);
+
+    List<SysUserAdminBonus> selectUserList(SysUserAdminBonus userAdmin);
 }

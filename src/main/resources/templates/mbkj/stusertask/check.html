@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('check表格页')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		 <form id="formId">
+		 	<input id="id" th:value="${id}" type="text">
+		 	<input id="month" th:value="${month}" type="text">
+		 </form>
+		<div class="row">
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+		var prefix = ctx + "mbkj/stusertask";
+        var datas = [[${@dict.getType('sys_normal_disable')}]];
+
+			$(function () {
+				queryList ($("#id").val(),$("#month").val());
+			})
+        function queryList (id,month)   {
+            var options = {
+                url: prefix + "/getBonusDetails/"+id+"/"+month,
+		        showSearch: false,
+		        showRefresh: false,
+		        showToggle: false,
+		        showColumns: false,
+                columns: [
+				{
+					field : 'name',
+					title : '项目'
+				},
+				{
+					field : 'score',
+					title : '权重'
+				},
+				{
+					field : 'mytarget',
+					title : '完成数'
+				},
+				{
+					field : 'targetscore',
+					title : '目标'
+				},
+				{
+					field : 'mytargetrate',
+					title : '完成率'
+				},
+				{
+					field : 'myscore',
+					title : '得分'
+				},
+		        ]
+            };
+            $.table.init(options);
+        } ;
+        
+        /* 添加用户-选择用户-提交 */
+		function submitHandler() {
+			var rows = $.table.selectFirstColumns();
+			if (rows.length == 0) {
+       			$.modal.alertWarning("请至少选择一条记录");
+       			return;
+       		}
+			alert(rows.join());
+		}
+    </script>
+</body>
+</html>

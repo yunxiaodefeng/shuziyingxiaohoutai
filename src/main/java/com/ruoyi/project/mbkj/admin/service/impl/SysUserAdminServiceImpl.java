@@ -1,12 +1,16 @@
 package com.ruoyi.project.mbkj.admin.service.impl;
 
-import java.util.List;
+import com.ruoyi.common.utils.text.Convert;
+import com.ruoyi.project.mbkj.admin.domain.SysUserAdmin;
+import com.ruoyi.project.mbkj.admin.domain.SysUserAdminBonus;
+import com.ruoyi.project.mbkj.admin.mapper.SysUserAdminMapper;
+import com.ruoyi.project.mbkj.admin.service.ISysUserAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.project.mbkj.admin.mapper.SysUserAdminMapper;
-import com.ruoyi.project.mbkj.admin.domain.SysUserAdmin;
-import com.ruoyi.project.mbkj.admin.service.ISysUserAdminService;
-import com.ruoyi.common.utils.text.Convert;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 员工管理Service业务层处理
@@ -90,5 +94,12 @@ public class SysUserAdminServiceImpl implements ISysUserAdminService
     public int deleteSysUserAdminById(Long id)
     {
         return sysUserAdminMapper.deleteSysUserAdminById(id);
+    }
+
+    @Override
+    public List<SysUserAdminBonus> selectUserList(SysUserAdminBonus userAdmin) {
+        Map<String,Object> map=new HashMap<>();
+        map.put("storeid",userAdmin.getStoreid());
+        return sysUserAdminMapper.selectUserList(map);
     }
 }

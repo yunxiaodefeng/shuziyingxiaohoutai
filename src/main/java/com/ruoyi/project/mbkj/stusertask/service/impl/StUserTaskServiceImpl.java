@@ -1,12 +1,16 @@
 package com.ruoyi.project.mbkj.stusertask.service.impl;
 
-import java.util.List;
+import com.github.pagehelper.Page;
+import com.ruoyi.common.utils.text.Convert;
+import com.ruoyi.project.mbkj.stusertask.domain.StUserTask;
+import com.ruoyi.project.mbkj.stusertask.mapper.StUserTaskMapper;
+import com.ruoyi.project.mbkj.stusertask.service.IStUserTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.project.mbkj.stusertask.mapper.StUserTaskMapper;
-import com.ruoyi.project.mbkj.stusertask.domain.StUserTask;
-import com.ruoyi.project.mbkj.stusertask.service.IStUserTaskService;
-import com.ruoyi.common.utils.text.Convert;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 存储设置的用户绩效Service业务层处理
@@ -90,5 +94,14 @@ public class StUserTaskServiceImpl implements IStUserTaskService
     public int deleteStUserTaskById(Long id)
     {
         return stUserTaskMapper.deleteStUserTaskById(id);
+    }
+
+    @Override
+    public Page<Map> selectList(Long userid, String time, int type) {
+        Map<String,Object> map=new HashMap();
+        map.put("userid",userid);
+        map.put("time",time);
+        map.put("type",type);
+        return stUserTaskMapper.selectList(map);
     }
 }

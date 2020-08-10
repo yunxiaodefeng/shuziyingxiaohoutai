@@ -19,6 +19,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, storeid, userid, score, month, createtime, stid, type from st_user_task
     </sql>
 
+
+    <select id="selectList" parameterType="map" resultType="map">
+         SELECT 	sut.*,sua.username,(case when stid='1' then '完善信息'  when stid='4' then '新建信息'  when stid='2' then '计划维护'
+                            when stid='3' then '跟进客户' else 	st.`name`  end)  as name
+        FROM 	st_user_task sut LEFT JOIN sys_user_admin sua ON sut.userid = sua.id  LEFT JOIN st_standard st on sut.stid = st.id
+    WHERE userid=#{userid} and month=#{time} and type=#{type}
+
+
+    </select>
+
+
+
     <select id="selectStUserTaskList" parameterType="StUserTask" resultMap="StUserTaskResult">
         <include refid="selectStUserTaskVo"/>
         <where>  

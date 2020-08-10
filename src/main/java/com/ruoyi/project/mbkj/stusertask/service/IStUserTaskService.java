@@ -1,7 +1,10 @@
 package com.ruoyi.project.mbkj.stusertask.service;
 
-import java.util.List;
+import com.github.pagehelper.Page;
 import com.ruoyi.project.mbkj.stusertask.domain.StUserTask;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 存储设置的用户绩效Service接口
@@ -58,4 +61,7 @@ public interface IStUserTaskService
      * @return 结果
      */
     public int deleteStUserTaskById(Long id);
+
+    Page<Map> selectList(Long id, String time, int i);
+
 }

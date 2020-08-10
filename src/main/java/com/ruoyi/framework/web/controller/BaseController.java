@@ -101,6 +101,14 @@ public class BaseController
         rspData.setTotal(total);
         return rspData;
     }
+    protected TableDataInfo getDataTableTask(List<?> list,String total)
+    {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(0);
+        rspData.setRows(list);
+        rspData.setMsg(total);
+        return rspData;
+    }
     /**
      * 响应返回结果
      * 
