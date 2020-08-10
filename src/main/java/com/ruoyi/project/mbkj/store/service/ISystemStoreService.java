@@ -1,8 +1,10 @@
 package com.ruoyi.project.mbkj.store.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ruoyi.framework.web.domain.Ztree;
+import com.ruoyi.project.mbkj.clientuser.domain.ClientUser;
 import com.ruoyi.project.mbkj.store.domain.SystemStore;
 import com.ruoyi.project.system.dept.domain.Dept;
 
@@ -70,4 +72,5 @@ public interface ISystemStoreService
      */
     public List<Ztree> selectStoreTree(SystemStore systemStore);
 
+    List<Map> selectIsAllStore(ClientUser clientUser);
 }

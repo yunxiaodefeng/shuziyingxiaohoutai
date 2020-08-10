@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.userdetail.mapper.ClientUserdetailMapper">
+    
+    <resultMap type="ClientUserdetail" id="ClientUserdetailResult">
+        <result property="id"    column="id"    />
+        <result property="libid"    column="libid"    />
+        <result property="content"    column="content"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="userid"    column="userid"    />
+        <result property="clientid"    column="clientid"    />
+    </resultMap>
+
+    <sql id="selectClientUserdetailVo">
+        select id, libid, content, createtime, userid, clientid from client_userdetail
+    </sql>
+
+    <select id="selectUserDatailsList" parameterType="map" resultType="map">
+          select cud.*,cu.`name` as clientname,su.username,sl.`name` as libname,sld.title  from client_userdetail cud
+                            LEFT JOIN client_user cu on cud.clientid=cu.id LEFT JOIN system_user su
+                            on cud.userid=su.id  LEFT JOIN system_lib sl on cud.libid=sl.id LEFT JOIN system_libdetail sld on cud.content=sld.id
+                            where  cud.clientid=#{clientid} and cud.libid=#{libid}
+     </select>
+
+
+    <select id="selectmypage" parameterType="map" resultType="map">
+         select cud.*,cu.`name` as clientname,su.username,sl.`name` as libname,sld.title  from client_userdetail cud
+                            LEFT JOIN client_user cu on cud.clientid=cu.id LEFT JOIN system_user su
+                            on cud.userid=su.id  LEFT JOIN system_lib sl on cud.libid=sl.id LEFT JOIN system_libdetail sld on cud.content=sld.id
+                            WHERE  cud.clientid=#{id}
+    </select>
+
+    <select id="selectClientUserdetailList" parameterType="ClientUserdetail" resultMap="ClientUserdetailResult">
+        <include refid="selectClientUserdetailVo"/>
+        <where>  
+            <if test="libid != null "> and libid = #{libid}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+            <if test="userid != null "> and userid = #{userid}</if>
+            <if test="clientid != null "> and clientid = #{clientid}</if>
+        </where>
+    </select>
+    
+    <select id="selectClientUserdetailById" parameterType="Long" resultMap="ClientUserdetailResult">
+        <include refid="selectClientUserdetailVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertClientUserdetail" parameterType="ClientUserdetail" useGeneratedKeys="true" keyProperty="id">
+        insert into client_userdetail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="libid != null">libid,</if>
+            <if test="content != null">content,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="userid != null">userid,</if>
+            <if test="clientid != null">clientid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="libid != null">#{libid},</if>
+            <if test="content != null">#{content},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="userid != null">#{userid},</if>
+            <if test="clientid != null">#{clientid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClientUserdetail" parameterType="ClientUserdetail">
+        update client_userdetail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="libid != null">libid = #{libid},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+            <if test="userid != null">userid = #{userid},</if>
+            <if test="clientid != null">clientid = #{clientid},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteClientUserdetailById" parameterType="Long">
+        delete from client_userdetail where id = #{id}
+    </delete>
+
+    <delete id="deleteClientUserdetailByIds" parameterType="String">
+        delete from client_userdetail where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

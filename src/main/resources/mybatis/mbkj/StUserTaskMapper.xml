@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.stusertask.mapper.StUserTaskMapper">
+    
+    <resultMap type="StUserTask" id="StUserTaskResult">
+        <result property="id"    column="id"    />
+        <result property="storeid"    column="storeid"    />
+        <result property="userid"    column="userid"    />
+        <result property="score"    column="score"    />
+        <result property="month"    column="month"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="stid"    column="stid"    />
+        <result property="type"    column="type"    />
+    </resultMap>
+
+    <sql id="selectStUserTaskVo">
+        select id, storeid, userid, score, month, createtime, stid, type from st_user_task
+    </sql>
+
+    <select id="selectStUserTaskList" parameterType="StUserTask" resultMap="StUserTaskResult">
+        <include refid="selectStUserTaskVo"/>
+        <where>  
+            <if test="storeid != null "> and storeid = #{storeid}</if>
+            <if test="userid != null "> and userid = #{userid}</if>
+            <if test="score != null  and score != ''"> and score = #{score}</if>
+            <if test="month != null  and month != ''"> and month = #{month}</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+            <if test="stid != null "> and stid = #{stid}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+        </where>
+    </select>
+    
+    <select id="selectStUserTaskById" parameterType="Long" resultMap="StUserTaskResult">
+        <include refid="selectStUserTaskVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertStUserTask" parameterType="StUserTask" useGeneratedKeys="true" keyProperty="id">
+        insert into st_user_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="storeid != null">storeid,</if>
+            <if test="userid != null">userid,</if>
+            <if test="score != null">score,</if>
+            <if test="month != null">month,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="stid != null">stid,</if>
+            <if test="type != null">type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="storeid != null">#{storeid},</if>
+            <if test="userid != null">#{userid},</if>
+            <if test="score != null">#{score},</if>
+            <if test="month != null">#{month},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="stid != null">#{stid},</if>
+            <if test="type != null">#{type},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStUserTask" parameterType="StUserTask">
+        update st_user_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="storeid != null">storeid = #{storeid},</if>
+            <if test="userid != null">userid = #{userid},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="month != null">month = #{month},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+            <if test="stid != null">stid = #{stid},</if>
+            <if test="type != null">type = #{type},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStUserTaskById" parameterType="Long">
+        delete from st_user_task where id = #{id}
+    </delete>
+
+    <delete id="deleteStUserTaskByIds" parameterType="String">
+        delete from st_user_task where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

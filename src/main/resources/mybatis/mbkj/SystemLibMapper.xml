@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.systemLib.mapper.SystemLibMapper">
+    
+    <resultMap type="SystemLib" id="SystemLibResult">
+        <result property="id"    column="id"    />
+        <result property="storeid"    column="storeid"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="must"    column="must"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="status"    column="status"    />
+        <result property="libtype"    column="libtype"    />
+        <result property="sorts"    column="sorts"    />
+    </resultMap>
+
+    <sql id="selectSystemLibVo">
+        select id, storeid, name, type, must, createtime, status, libtype, sorts from system_lib
+    </sql>
+
+
+    <select id="selectSystemLibListMap" parameterType="SystemLib" resultType="map">
+        <include refid="selectSystemLibVo"/>
+        <where>
+            <if test="storeid != null "> and storeid = #{storeid}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="must != null  and must != ''"> and must = #{must}</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="libtype != null  and libtype != ''"> and libtype = #{libtype}</if>
+            <if test="sorts != null  and sorts != ''"> and sorts = #{sorts}</if>
+        </where>
+        order by type
+    </select>
+
+    <select id="selectSystemLibList" parameterType="SystemLib" resultMap="SystemLibResult">
+        <include refid="selectSystemLibVo"/>
+        <where>  
+            <if test="storeid != null "> and storeid = #{storeid}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="must != null  and must != ''"> and must = #{must}</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="libtype != null  and libtype != ''"> and libtype = #{libtype}</if>
+            <if test="sorts != null  and sorts != ''"> and sorts = #{sorts}</if>
+        </where>
+    </select>
+    
+    <select id="selectSystemLibById" parameterType="Long" resultMap="SystemLibResult">
+        <include refid="selectSystemLibVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSystemLib" parameterType="SystemLib" useGeneratedKeys="true" keyProperty="id">
+        insert into system_lib
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="storeid != null">storeid,</if>
+            <if test="name != null">name,</if>
+            <if test="type != null">type,</if>
+            <if test="must != null">must,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="status != null">status,</if>
+            <if test="libtype != null">libtype,</if>
+            <if test="sorts != null">sorts,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="storeid != null">#{storeid},</if>
+            <if test="name != null">#{name},</if>
+            <if test="type != null">#{type},</if>
+            <if test="must != null">#{must},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="libtype != null">#{libtype},</if>
+            <if test="sorts != null">#{sorts},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSystemLib" parameterType="SystemLib">
+        update system_lib
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="storeid != null">storeid = #{storeid},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="must != null">must = #{must},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="libtype != null">libtype = #{libtype},</if>
+            <if test="sorts != null">sorts = #{sorts},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSystemLibById" parameterType="Long">
+        delete from system_lib where id = #{id}
+    </delete>
+
+    <delete id="deleteSystemLibByIds" parameterType="String">
+        delete from system_lib where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

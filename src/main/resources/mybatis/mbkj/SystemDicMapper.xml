@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.systemDic.mapper.SystemDicMapper">
+    
+    <resultMap type="SystemDic" id="SystemDicResult">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+        <result property="key"    column="key"    />
+        <result property="value"    column="value"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="des"    column="des"    />
+    </resultMap>
+
+    <sql id="selectSystemDicVo">
+        select a.id, a.type, a.key, a.value, a.createtime, a.des from system_dic a
+    </sql>
+
+    <select id="selectSystemDicList" parameterType="SystemDic" resultMap="SystemDicResult">
+        <include refid="selectSystemDicVo"/>
+        <where>  
+            <if test="type != null  and type != ''"> and  a.type = #{type}</if>
+            <if test="key != null  and key != ''"> and  a.key = #{key}</if>
+            <if test="value != null  and value != ''"> and  a.value = #{value}</if>
+            <if test="createtime != null "> and  a.createtime = #{createtime}</if>
+            <if test="des != null  and des != ''"> and  a.des = #{des}</if>
+        </where>
+    </select>
+    
+    <select id="selectSystemDicById" parameterType="Long" resultMap="SystemDicResult">
+        <include refid="selectSystemDicVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSystemDic" parameterType="SystemDic" useGeneratedKeys="true" keyProperty="id">
+        insert into system_dic
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">type,</if>
+            <if test="key != null">key,</if>
+            <if test="value != null">value,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="des != null">des,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">#{type},</if>
+            <if test="key != null">#{key},</if>
+            <if test="value != null">#{value},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="des != null">#{des},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSystemDic" parameterType="SystemDic">
+        update system_dic
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null">type = #{type},</if>
+            <if test="key != null">key = #{key},</if>
+            <if test="value != null">value = #{value},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+            <if test="des != null">des = #{des},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSystemDicById" parameterType="Long">
+        delete from system_dic where id = #{id}
+    </delete>
+
+    <delete id="deleteSystemDicByIds" parameterType="String">
+        delete from system_dic where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

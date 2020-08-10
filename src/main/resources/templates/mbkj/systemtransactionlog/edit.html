@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改交易记录')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-systemtransactionlog-edit" th:object="${systemTransactionLog}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户id：</label>
+                <div class="col-sm-8">
+                    <input name="clientid" th:field="*{clientid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">用户id：</label>
+                <div class="col-sm-8">
+                    <input name="userid" th:field="*{userid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">指标id：</label>
+                <div class="col-sm-8">
+                    <input name="standardid" th:field="*{standardid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">指标数：</label>
+                <div class="col-sm-8">
+                    <textarea name="mytarget" class="form-control">[[*{mytarget}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">st_usertarget表中的主键：</label>
+                <div class="col-sm-8">
+                    <input name="usertargetid" th:field="*{usertargetid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">资产类型 1 正资产 2负资产：</label>
+                <div class="col-sm-8">
+                    <select name="assettype" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "mbkj/systemtransactionlog";
+        $("#form-systemtransactionlog-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-systemtransactionlog-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

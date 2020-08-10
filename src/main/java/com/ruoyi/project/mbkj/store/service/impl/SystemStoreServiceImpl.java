@@ -1,18 +1,20 @@
 package com.ruoyi.project.mbkj.store.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.ruoyi.project.mbkj.store.mapper.SystemStoreMapper;
-import com.ruoyi.project.mbkj.store.domain.SystemStore;
-import com.ruoyi.project.mbkj.store.service.ISystemStoreService;
-import com.ruoyi.project.system.dept.domain.Dept;
-import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.text.Convert;
 import com.ruoyi.framework.aspectj.lang.annotation.DataScope;
 import com.ruoyi.framework.web.domain.Ztree;
+import com.ruoyi.project.mbkj.clientuser.domain.ClientUser;
+import com.ruoyi.project.mbkj.store.domain.SystemStore;
+import com.ruoyi.project.mbkj.store.mapper.SystemStoreMapper;
+import com.ruoyi.project.mbkj.store.service.ISystemStoreService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 网点Service业务层处理
@@ -111,7 +113,14 @@ public class SystemStoreServiceImpl implements ISystemStoreService
         List<Ztree> ztrees = initZtree(storeList);
         return ztrees;
     }
-    
+
+    @Override
+    public List<Map> selectIsAllStore(ClientUser clientUser) {
+        Map<String,Object> map=new HashMap<>();
+        map.put("id",clientUser.getStoreid());
+        return systemStoreMapper.selectIsAllStore(map);
+    }
+
     /**
      * 对象转部门树
      *

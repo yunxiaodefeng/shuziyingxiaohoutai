@@ -1,10 +1,5 @@
 package com.ruoyi.framework.web.controller;
 
-import java.beans.PropertyEditorSupport;
-import java.util.Date;
-import java.util.List;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.utils.DateUtils;
@@ -17,6 +12,12 @@ import com.ruoyi.framework.web.page.PageDomain;
 import com.ruoyi.framework.web.page.TableDataInfo;
 import com.ruoyi.framework.web.page.TableSupport;
 import com.ruoyi.project.system.user.domain.User;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+
+import java.beans.PropertyEditorSupport;
+import java.util.Date;
+import java.util.List;
 
 /**
  * web层通用数据处理
@@ -56,7 +57,17 @@ public class BaseController
             PageHelper.startPage(pageNum, pageSize, orderBy);
         }
     }
-
+    protected void startPageOnlyOrderBy()
+    {
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        Integer pageNum = pageDomain.getPageNum();
+        Integer pageSize = pageDomain.getPageSize();
+        if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))
+        {
+            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+            PageHelper.orderBy( orderBy);
+        }
+    }
     /**
      * 设置请求排序数据
      */
@@ -82,7 +93,14 @@ public class BaseController
         rspData.setTotal(new PageInfo(list).getTotal());
         return rspData;
     }
-
+    protected TableDataInfo getDataTableNew(List<?> list,Integer total)
+    {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(0);
+        rspData.setRows(list);
+        rspData.setTotal(total);
+        return rspData;
+    }
     /**
      * 响应返回结果
      * 

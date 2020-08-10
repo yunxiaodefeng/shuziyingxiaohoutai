@@ -792,13 +792,56 @@ var table = {
             	    }
             	});
             },
+			//弹出层显示详情
+			openShow: function (title, url, width, height, callback) {
+				//如果是移动端，就使用自适应大小弹窗
+				if ($.common.isMobile()) {
+					width = 'auto';
+					height = 'auto';
+				}
+				if ($.common.isEmpty(title)) {
+					title = false;
+				}
+				if ($.common.isEmpty(url)) {
+					url = "/404.html";
+				}
+				if ($.common.isEmpty(width)) {
+					width = 800;
+				}
+				if ($.common.isEmpty(height)) {
+					height = ($(window).height() - 50);
+				}
+				if ($.common.isEmpty(callback)) {
+					callback = function(index, layero) {
+						var iframeWin = layero.find('iframe')[0];
+						iframeWin.contentWindow.submitHandler(index, layero);
+					}
+				}
+				layer.open({
+					type: 2,
+					area: [width + 'px', height + 'px'],
+					fix: false,
+					//不固定
+					maxmin: true,
+					shade: 0.3,
+					title: title,
+					content: url,
+					btn: ["", '关闭'],
+					// 弹层外区域关闭
+					shadeClose: true,
+					yes: callback,
+					cancel: function(index) {
+						return true;
+					}
+				});
+			},
             // 弹出层指定参数选项
             openOptions: function (options) {
             	var _url = $.common.isEmpty(options.url) ? "/404.html" : options.url; 
             	var _title = $.common.isEmpty(options.title) ? "系统窗口" : options.title; 
                 var _width = $.common.isEmpty(options.width) ? "800" : options.width; 
                 var _height = $.common.isEmpty(options.height) ? ($(window).height() - 50) : options.height;
-                var _btn = ['<i class="fa fa-check"></i> 确认', '<i class="fa fa-close"></i> 关闭'];
+                var _btn = [ '<i class="fa fa-close"></i> 关闭'];
                 if ($.common.isEmpty(options.yes)) {
                 	options.yes = function(index, layero) {
                     	options.callBack(index, layero);
@@ -833,6 +876,46 @@ var table = {
         		    layer.full(index);
         		}
             },
+			openOptionsOnlyClose: function (options) {
+				var _url = $.common.isEmpty(options.url) ? "/404.html" : options.url;
+				var _title = $.common.isEmpty(options.title) ? "系统窗口" : options.title;
+				var _width = $.common.isEmpty(options.width) ? "800" : options.width;
+				var _height = $.common.isEmpty(options.height) ? ($(window).height() - 50) : options.height;
+				var _btn = [ '<i class="fa fa-close"></i> 关闭'];
+				if ($.common.isEmpty(options.yes)) {
+					options.yes = function(index, layero) {
+						options.callBack(index, layero);
+					}
+				}
+				var btnCallback = {};
+				if(options.btn instanceof Array){
+					for (var i = 1, len = options.btn.length; i < len; i++) {
+						var btn = options["btn" + (i + 1)];
+						if (btn) {
+							btnCallback["btn" + (i + 1)] = btn;
+						}
+					}
+				}
+				var index = layer.open($.extend({
+					type: 2,
+					maxmin: $.common.isEmpty(options.maxmin) ? true : options.maxmin,
+					shade: 0.3,
+					title: _title,
+					fix: false,
+					area: [_width + 'px', _height + 'px'],
+					content: _url,
+					shadeClose: $.common.isEmpty(options.shadeClose) ? true : options.shadeClose,
+					skin: options.skin,
+					btn: $.common.isEmpty(options.btn) ? _btn : options.btn,
+					yes: options.yes,
+					cancel: function () {
+						return true;
+					}
+				}, btnCallback));
+				if ($.common.isNotEmpty(options.full) && options.full === true) {
+					layer.full(index);
+				}
+			},
             // 弹出层全屏
             openFull: function (title, url, width, height) {
             	//如果是移动端，就使用自适应大小弹窗

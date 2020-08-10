@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.storelib.mapper.SystemStorelibMapper">
+    
+    <resultMap type="SystemStorelib" id="SystemStorelibResult">
+        <result property="id"    column="id"    />
+        <result property="libid"    column="libid"    />
+        <result property="ismust"    column="ismust"    />
+        <result property="ispublicmust"    column="ispublicmust"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="storeid"    column="storeid"    />
+        <result property="sorts"    column="sorts"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectSystemStorelibVo">
+        select id, libid, ismust, ispublicmust, createtime, storeid, sorts, status from system_storelib
+    </sql>
+
+    <select id="selectSystemStorelibList" parameterType="SystemStorelib" resultMap="SystemStorelibResult">
+        <include refid="selectSystemStorelibVo"/>
+        <where>  
+            <if test="libid != null  and libid != ''"> and libid = #{libid}</if>
+            <if test="ismust != null  and ismust != ''"> and ismust = #{ismust}</if>
+            <if test="ispublicmust != null  and ispublicmust != ''"> and ispublicmust = #{ispublicmust}</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+            <if test="storeid != null "> and storeid = #{storeid}</if>
+            <if test="sorts != null  and sorts != ''"> and sorts = #{sorts}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectSystemStorelibById" parameterType="Long" resultMap="SystemStorelibResult">
+        <include refid="selectSystemStorelibVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSystemStorelib" parameterType="SystemStorelib" useGeneratedKeys="true" keyProperty="id">
+        insert into system_storelib
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="libid != null">libid,</if>
+            <if test="ismust != null">ismust,</if>
+            <if test="ispublicmust != null">ispublicmust,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="storeid != null">storeid,</if>
+            <if test="sorts != null">sorts,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="libid != null">#{libid},</if>
+            <if test="ismust != null">#{ismust},</if>
+            <if test="ispublicmust != null">#{ispublicmust},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="storeid != null">#{storeid},</if>
+            <if test="sorts != null">#{sorts},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSystemStorelib" parameterType="SystemStorelib">
+        update system_storelib
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="libid != null">libid = #{libid},</if>
+            <if test="ismust != null">ismust = #{ismust},</if>
+            <if test="ispublicmust != null">ispublicmust = #{ispublicmust},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+            <if test="storeid != null">storeid = #{storeid},</if>
+            <if test="sorts != null">sorts = #{sorts},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSystemStorelibById" parameterType="Long">
+        delete from system_storelib where id = #{id}
+    </delete>
+
+    <delete id="deleteSystemStorelibByIds" parameterType="String">
+        delete from system_storelib where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
