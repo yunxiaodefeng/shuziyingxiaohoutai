@@ -1,114 +1,110 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('数据统计列表')" />
-    <th:block th:include="include :: layout-latest-css" />
-	<th:block th:include="include :: ztree-css" />
+<th:block th:include="include :: header('数据统计列表')" />
+<th:block th:include="include :: layout-latest-css" />
+<th:block th:include="include :: ztree-css" />
 </head>
 <body class="gray-bg">
-    
-    <!--网点信息树 -->
+
+	<!--网点信息树 -->
 	<div class="ui-layout-west">
-			<div class="box box-main">
-				<div class="box-header">
-					<div class="box-title">
-						<i class="fa icon-grid"></i> 网点信息
-					</div>
-					<div class="box-tools pull-right">
-					    <a type="button" class="btn btn-box-tool" href="#" onclick="dept()" title="网点"><i class="fa fa-edit"></i></a>
-						<button type="button" class="btn btn-box-tool" id="btnExpand" title="展开" style="display:none;"><i class="fa fa-chevron-up"></i></button>
-						<button type="button" class="btn btn-box-tool" id="btnCollapse" title="折叠"><i class="fa fa-chevron-down"></i></button>
-						<button type="button" class="btn btn-box-tool" id="btnRefresh" title="刷新网点"><i class="fa fa-refresh"></i></button>
-					</div>
+		<div class="box box-main">
+			<div class="box-header">
+				<div class="box-title">
+					<i class="fa icon-grid"></i> 网点信息
 				</div>
-				<div class="ui-layout-content">
-					<div id="tree" class="ztree"></div>
+				<div class="box-tools pull-right">
+					<a type="button" class="btn btn-box-tool" href="#" onclick="dept()"
+						title="网点"><i class="fa fa-edit"></i></a>
+					<button type="button" class="btn btn-box-tool" id="btnExpand"
+						title="展开" style="display: none;">
+						<i class="fa fa-chevron-up"></i>
+					</button>
+					<button type="button" class="btn btn-box-tool" id="btnCollapse"
+						title="折叠">
+						<i class="fa fa-chevron-down"></i>
+					</button>
+					<button type="button" class="btn btn-box-tool" id="btnRefresh"
+						title="刷新网点">
+						<i class="fa fa-refresh"></i>
+					</button>
+				</div>
+			</div>
+			<div class="ui-layout-content">
+				<div id="tree" class="ztree"></div>
+			</div>
+		</div>
+	</div>
+	<div class="ui-layout-center">
+		<div class="container-div">
+			<div class="row">
+				<div class="col-sm-12 search-collapse">
+					<form id="formId">
+						<div class="select-list">
+							<ul>
+
+								<li class="select-time"><label>开始时间：</label> <input
+									type="text" class="time-input" id="startTime"
+									placeholder="开始时间" name="params[beginCreatetime]" /></li>
+
+								<li class="select-time"><label>结束时间：</label> <input
+									type="text" class="time-input" id="endTime" placeholder="结束时间"
+									name="params[endCreatetime]" /></li>
+
+								<li><a class="btn btn-primary btn-rounded btn-sm"
+									onclick="searchData()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+									<a class="btn btn-warning btn-rounded btn-sm"
+									onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+								</li>
+							</ul>
+						</div>
+					</form>
+				</div>
+
+				<div class="btn-group-sm" id="toolbar" role="group">
+					<a class="btn btn-success" onclick="$.operate.add()"
+						shiro:hasPermission="mbkj:usermonthtarget:add"> <i
+						class="fa fa-plus"></i> 添加
+					</a> <a class="btn btn-primary single disabled"
+						onclick="$.operate.edit()"
+						shiro:hasPermission="mbkj:usermonthtarget:edit"> <i
+						class="fa fa-edit"></i> 修改
+					</a> <a class="btn btn-danger multiple disabled"
+						onclick="$.operate.removeAll()"
+						shiro:hasPermission="mbkj:usermonthtarget:remove"> <i
+						class="fa fa-remove"></i> 删除
+					</a> <a class="btn btn-warning" onclick="$.table.exportExcel()"
+						shiro:hasPermission="mbkj:usermonthtarget:export"> <i
+						class="fa fa-download"></i> 导出
+					</a>
+				</div>
+				<div class="col-sm-12 select-table table-striped">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr id="header-item"></tr>
+						</thead>
+						<tbody id="body-item">
+
+						</tbody>
+
+					</table>
 				</div>
 			</div>
 		</div>
-		<div class="ui-layout-center">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <label>用户id：</label>
-                                <input type="text" name="userid"/>
-                            </li>
-                            <li>
-                                <label>指标：</label>
-                                <input type="text" name="target"/>
-                            </li>
-                            <li>
-                                <label>已完成目标：</label>
-                                <input type="text" name="mytarget"/>
-                            </li>
-                            <li class="select-time">
-                                <label>创建时间：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreatetime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreatetime]"/>
-                            </li>
-                            <li>
-                                <label>备注：</label>
-                                <input type="text" name="markes"/>
-                            </li>
-                            <li>
-                                <label>网点指标：</label>
-                                <input type="text" name="storestid"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
-
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="mbkj:usermonthtarget:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="mbkj:usermonthtarget:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="mbkj:usermonthtarget:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="mbkj:usermonthtarget:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table class="table table-bordered table-hover">
-                	<thead>
-                		<tr id="header-item" ></tr>
-                	</thead>
-                	<tbody>
-                		<tr id="body-item">
-                			
-                		</tr>
-                	</tbody>
-                
-                </table>
-            </div>
-        </div>
-    </div>
-    </div>
-    <th:block th:include="include :: footer" />
+	</div>
+	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: layout-latest-js" />
 	<th:block th:include="include :: ztree-js" />
-    <script th:inline="javascript">
+	<script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('mbkj:usermonthtarget:edit')}]];
         var removeFlag = [[${@permission.hasPermi('mbkj:usermonthtarget:remove')}]];
         var prefix = ctx + "mbkj/usermonthtarget";
         
         var target = ctx + "mbkj/standard";
         
-        var header = "<th><div class='th-inner sortable both' style='width:70px'>贡献</div></th><th><div class='th-inner sortable both' style='width:70px'>新建信息</div></th><th><div class='th-inner sortable both' style='width:70px'>完善信息</div></th><th><div class='th-inner sortable both' style='width:70px'>计划维护</div></th><th><div class='th-inner sortable both' style='width:70px'>跟进客户</div></th>";
+        var header = "<th><div class='th-inner sortable both' style='width:100px'></div></th><th><div class='th-inner sortable both' style='width:70px'>贡献</div></th><th><div class='th-inner sortable both' style='width:70px'>新建信息</div></th><th><div class='th-inner sortable both' style='width:70px'>完善信息</div></th><th><div class='th-inner sortable both' style='width:70px'>计划维护</div></th><th><div class='th-inner sortable both' style='width:70px'>跟进客户</div></th>";
         
         var jsonItem =[{
             checkbox: true
@@ -172,11 +168,13 @@
         			var data = result.rows;
         			
         			for(var i=0;i < data.length;i++){
-        				var temp = "<th><div class='th-inner sortable both' style='width:80px'>";
+        				var temp = "<th style='text-align:center'><div  class='th-inner sortable both' style='width:80px'>";
         				
        				　　　temp = temp+ data[i].name +"</div></th>";
        					header = header + temp;
        				}
+        			
+        			
         			console.log(header);
        				$("#header-item").append(header);
         			
@@ -215,7 +213,8 @@
             };
             $.table.init(options);
         }
-        
+        var treeNodePId = '';
+        var treeNodeId = '';
         function queryDeptTree()
 		{
 			var url = ctx + "mbkj/store/treeData";
@@ -232,15 +231,44 @@
 				
 				console.log(treeNode.id);
 				console.log(treeNode.pId);
+				treeNodePId = treeNode.pId;
+				treeNodeId = treeNode.id;
 				if(treeNode.pId == null){
-					getBody(treeNode.id,0)
+					$.ajax({
+		        		url:prefix + "/selectStoretarget",
+		        		type:"POST",
+		        		dataType:"Json",
+		        		success:function(result){
+		        			console.log(result);
+		        			$("#body-item").empty("");
+		        			$("#body-item").append(result.data);
+		       				
+		        			
+		        		}
+		        	})
 				}else{
-					getBody(treeNode.id,1)
+					if(treeNode.id == null){
+						alert("请先选择网点");
+						return;
+					}
+					$.ajax({
+		        		url:prefix + "/selectUsertarget",
+		        		type:"POST",
+		        		dataType:"Json",
+		        		data:{
+		        			'storeId':treeNode.id 
+		        		},
+		        		success:function(result){
+		        			console.log(result);
+		        			$("#body-item").empty("");
+		        			$("#body-item").append(result.data);
+		       				
+		        			
+		        		}
+		        	})
 				}
 				
-				/* $.ajax({
-					url:target + "/list",
-				}) */
+				
 			}
 		}
 		
@@ -260,79 +288,60 @@
 			queryDeptTree();
 		});
 		
-		// -----------贡献------------
-		function getGongxian(type){
+		function searchData(){
+       		
+			var startTime = $("#startTime").val();
+			var endTime = $("#endTime").val();
+			if(startTime == ''){
+				alert("请选择开始日期");
+				return;
+			}
+			if(endTime == ''){
+				alert("请选择结束日期");
+				return;
+			}
 			
-        	$.ajax({
-        		url:target + "/list",
-        		type:"POST",
-        		dataType:"Json",
-        		success:function(result){
-        			console.log("表头信息");
-        			
-        			var data = result.rows;
-        			
-        			for(var i=0;i < data.length;i++){
-        				var temp = "<th><div class='th-inner sortable both' style='width:80px'>";
-        				
-       				　　　temp = temp+ data[i].name +"</div></th>";
-       					header = header + temp;
-       				}
-        			console.log(header);
-       				$("#header-item").append(header);
-        			
-        		}
-        	})
-		}
-		
-		// -----------四个指标------------
-		function getFourTarget(){
 			
-        	$.ajax({
-        		url:target + "/list",
-        		type:"POST",
-        		dataType:"Json",
-        		success:function(result){
-        			console.log("表头信息");
-        			
-        			var data = result.rows;
-        			
-        			for(var i=0;i < data.length;i++){
-        				var temp = "<th><div class='th-inner sortable both' style='width:80px'>";
-        				
-       				　　　temp = temp+ data[i].name +"</div></th>";
-       					header = header + temp;
-       				}
-        			console.log(header);
-       				$("#header-item").append(header);
-        			
-        		}
-        	})
-		}
-		
-		// -----------其他指标------------
-		function getOtherTarget(){
 			
-        	$.ajax({
-        		url:target + "/list",
-        		type:"POST",
-        		dataType:"Json",
-        		success:function(result){
-        			console.log("表头信息");
-        			
-        			var data = result.rows;
-        			
-        			for(var i=0;i < data.length;i++){
-        				var temp = "<th><div class='th-inner sortable both' style='width:80px'>";
-        				
-       				　　　temp = temp+ data[i].name +"</div></th>";
-       					header = header + temp;
-       				}
-        			console.log(header);
-       				$("#header-item").append(header);
-        			
-        		}
-        	})
+			if(treeNodeId == ''){
+				$.ajax({
+	        		url:prefix + "/selectStoretarget",
+	        		type:"POST",
+	        		dataType:"Json",
+	        		data:{
+	        			"startTime":startTime,
+	        			"endTime":endTime
+	        		},
+	        		success:function(result){
+	        			console.log(result);
+	        			$("#body-item").empty("");
+	        			$("#body-item").append(result.data);
+	        			
+	        		}
+	        	})
+			}else{
+				if(treeNodeId == null){
+					alert("请先选择网点");
+					return;
+				}
+				$.ajax({
+	        		url:prefix + "/selectUsertarget",
+	        		type:"POST",
+	        		dataType:"Json",
+	        		data:{
+	        			"startTime":startTime,
+	        			"endTime":endTime,
+	        			'storeId':treeNodeId
+	        		},
+	        		success:function(result){
+	        			console.log(result);
+	        			$("#body-item").empty("");
+	        			$("#body-item").append(result.data);
+	       				
+	        			
+	        		}
+	        	})
+			} 
 		}
     </script>
 </body>

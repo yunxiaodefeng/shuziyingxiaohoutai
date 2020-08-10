@@ -2,6 +2,9 @@ package com.ruoyi.project.mbkj.usermonthtarget.service;
 
 import java.util.List;
 import com.ruoyi.project.mbkj.usermonthtarget.domain.StUsermonthtarget;
+import com.ruoyi.project.ro.SelectTargetParam;
+import com.ruoyi.project.vo.OtherTargetResult;
+import com.ruoyi.project.vo.TargetResult;
 
 /**
  * 数据统计Service接口
@@ -58,4 +61,14 @@ public interface IStUsermonthtargetService
      * @return 结果
      */
     public int deleteStUsermonthtargetById(Long id);
+    
+    
+
+	public TargetResult select5target(SelectTargetParam selectTargetParam );
+
+	public List<OtherTargetResult> selectOthertarget(SelectTargetParam selectTargetParam);
+
+	public TargetResult selectUser5target(SelectTargetParam selectTargetParam);
+
+	public List<OtherTargetResult> selectUserOthertarget(SelectTargetParam selectTargetParam);
 }

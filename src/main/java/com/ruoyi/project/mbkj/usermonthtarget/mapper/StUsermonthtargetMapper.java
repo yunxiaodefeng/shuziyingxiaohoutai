@@ -2,6 +2,9 @@ package com.ruoyi.project.mbkj.usermonthtarget.mapper;
 
 import java.util.List;
 import com.ruoyi.project.mbkj.usermonthtarget.domain.StUsermonthtarget;
+import com.ruoyi.project.ro.SelectTargetParam;
+import com.ruoyi.project.vo.OtherTargetResult;
+import com.ruoyi.project.vo.TargetResult;
 
 /**
  * 数据统计Mapper接口
@@ -58,4 +61,12 @@ public interface StUsermonthtargetMapper
      * @return 结果
      */
     public int deleteStUsermonthtargetByIds(String[] ids);
+
+	public TargetResult select5target(SelectTargetParam selectTargetParam);
+
+	public List<OtherTargetResult> selectOthertarget(SelectTargetParam selectTargetParam);
+
+	public TargetResult selectUser5target(SelectTargetParam selectTargetParam);
+
+	public List<OtherTargetResult> selectUserOthertarget(SelectTargetParam selectTargetParam);
 }

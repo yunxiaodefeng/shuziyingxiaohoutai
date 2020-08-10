@@ -44,9 +44,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="jobid != null  and jobid != ''"> and a.jobid = #{jobid}</if>
             <if test="sex != null  and sex != ''"> and b.sex = #{sex}</if>
             <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>
-            
-             
         </where>
+        
+        GROUP BY a.id
     </select>
     
     <select id="selectSysUserAdminById" parameterType="Long" resultMap="SysUserAdminResult">

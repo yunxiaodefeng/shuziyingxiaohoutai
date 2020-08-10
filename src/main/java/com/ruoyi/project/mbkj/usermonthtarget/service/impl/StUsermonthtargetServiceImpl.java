@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.project.mbkj.usermonthtarget.mapper.StUsermonthtargetMapper;
 import com.ruoyi.project.mbkj.usermonthtarget.domain.StUsermonthtarget;
 import com.ruoyi.project.mbkj.usermonthtarget.service.IStUsermonthtargetService;
+import com.ruoyi.project.ro.SelectTargetParam;
+import com.ruoyi.project.vo.OtherTargetResult;
+import com.ruoyi.project.vo.TargetResult;
 import com.ruoyi.common.utils.text.Convert;
 
 /**
@@ -91,4 +94,28 @@ public class StUsermonthtargetServiceImpl implements IStUsermonthtargetService
     {
         return stUsermonthtargetMapper.deleteStUsermonthtargetById(id);
     }
+
+	@Override
+	public TargetResult select5target(SelectTargetParam selectTargetParam) {
+		// TODO Auto-generated method stub
+		return stUsermonthtargetMapper.select5target(selectTargetParam) ;
+	}
+
+	@Override
+	public List<OtherTargetResult> selectOthertarget(SelectTargetParam selectTargetParam) {
+		// TODO Auto-generated method stub
+		return stUsermonthtargetMapper.selectOthertarget(selectTargetParam);
+	}
+
+	@Override
+	public TargetResult selectUser5target(SelectTargetParam selectTargetParam) {
+		// TODO Auto-generated method stub
+		return stUsermonthtargetMapper.selectUser5target(selectTargetParam);
+	}
+
+	@Override
+	public List<OtherTargetResult> selectUserOthertarget(SelectTargetParam selectTargetParam) {
+		// TODO Auto-generated method stub
+		return stUsermonthtargetMapper.selectUserOthertarget(selectTargetParam);
+	}
 }
