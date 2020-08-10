@@ -5,6 +5,10 @@
 <th:block th:include="include :: header('数据统计列表')" />
 <th:block th:include="include :: layout-latest-css" />
 <th:block th:include="include :: ztree-css" />
+<style>
+	
+
+</style>
 </head>
 <body class="gray-bg">
 
@@ -80,7 +84,7 @@
 						class="fa fa-download"></i> 导出
 					</a>
 				</div>
-				<div class="col-sm-12 select-table table-striped">
+				<div class="col-sm-12 select-table table-striped " style="overflow-x: scroll;">
 					<table class="table table-bordered table-hover">
 						<thead>
 							<tr id="header-item"></tr>
@@ -88,7 +92,6 @@
 						<tbody id="body-item">
 
 						</tbody>
-
 					</table>
 				</div>
 			</div>
@@ -104,7 +107,7 @@
         
         var target = ctx + "mbkj/standard";
         
-        var header = "<th><div class='th-inner sortable both' style='width:100px'></div></th><th><div class='th-inner sortable both' style='width:70px'>贡献</div></th><th><div class='th-inner sortable both' style='width:70px'>新建信息</div></th><th><div class='th-inner sortable both' style='width:70px'>完善信息</div></th><th><div class='th-inner sortable both' style='width:70px'>计划维护</div></th><th><div class='th-inner sortable both' style='width:70px'>跟进客户</div></th>";
+        var header = "<th><div class='th-inner sortable both' style='width:100px'>网点/人员</div></th><th><div class='th-inner sortable both' style='width:70px'>贡献</div></th><th><div class='th-inner sortable both' style='width:70px'>新建信息</div></th><th><div class='th-inner sortable both' style='width:70px'>完善信息</div></th><th><div class='th-inner sortable both' style='width:70px'>计划维护</div></th><th><div class='th-inner sortable both' style='width:70px'>跟进客户</div></th>";
         
         var jsonItem =[{
             checkbox: true
@@ -145,6 +148,7 @@
         }];
  
         $(function() {
+        	
         	getHeader();
         	
         	var panehHidden = false;
@@ -154,6 +158,9 @@
    			 $('body').layout({ initClosed: panehHidden, west__size: 185 });
    		    queryUserList();
    		    queryDeptTree();
+   		    
+   		
+   	       
    		    
         });
         
@@ -244,8 +251,11 @@
 		        			$("#body-item").append(result.data);
 		       				
 		        			
+		        			
 		        		}
 		        	})
+		        	
+		        	treeNodeId='';
 				}else{
 					if(treeNode.id == null){
 						alert("请先选择网点");
@@ -266,6 +276,9 @@
 		        			
 		        		}
 		        	})
+		        	 
+		        	
+		        	
 				}
 				
 				
@@ -337,7 +350,6 @@
 	        			console.log(result);
 	        			$("#body-item").empty("");
 	        			$("#body-item").append(result.data);
-	       				
 	        			
 	        		}
 	        	})
