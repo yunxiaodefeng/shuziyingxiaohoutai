@@ -1,7 +1,9 @@
 package com.ruoyi.project.mbkj.store.mapper;
 
-import java.util.List;
 import com.ruoyi.project.mbkj.store.domain.SystemStore;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 网点Mapper接口
@@ -58,4 +60,6 @@ public interface SystemStoreMapper
      * @return 结果
      */
     public int deleteSystemStoreByIds(String[] ids);
+
+    List<Map> selectIsAllStore(Map<String, Object> map);
 }

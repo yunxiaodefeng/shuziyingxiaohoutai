@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.systemlibdetail.mapper.SystemLibdetailMapper">
+    
+    <resultMap type="SystemLibdetail" id="SystemLibdetailResult">
+        <result property="id"    column="id"    />
+        <result property="libid"    column="libid"    />
+        <result property="title"    column="title"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="status"    column="status"    />
+        <result property="sorts"    column="sorts"    />
+    </resultMap>
+
+    <sql id="selectSystemLibdetailVo">
+        select id, libid , title, createtime, status, sorts from system_libdetail
+    </sql>
+
+    <select id="selectSystemLibdetailList" parameterType="SystemLibdetail" resultMap="SystemLibdetailResult">
+        <include refid="selectSystemLibdetailVo"/>
+        <where>  
+            <if test="libid != null "> and libid = #{libid}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="sorts != null  and sorts != ''"> and sorts = #{sorts}</if>
+        </where>
+    </select>
+    
+    <select id="selectSystemLibdetailById" parameterType="Long" resultMap="SystemLibdetailResult">
+        <include refid="selectSystemLibdetailVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSystemLibdetail" parameterType="SystemLibdetail" useGeneratedKeys="true" keyProperty="id">
+        insert into system_libdetail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="libid != null">libid,</if>
+            <if test="title != null">title,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="status != null">status,</if>
+            <if test="sorts != null">sorts,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="libid != null">#{libid},</if>
+            <if test="title != null">#{title},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="sorts != null">#{sorts},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSystemLibdetail" parameterType="SystemLibdetail">
+        update system_libdetail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="libid != null">libid = #{libid},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="sorts != null">sorts = #{sorts},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSystemLibdetailById" parameterType="Long">
+        delete from system_libdetail where id = #{id}
+    </delete>
+
+    <delete id="deleteSystemLibdetailByIds" parameterType="String">
+        delete from system_libdetail where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -19,6 +19,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="code"    column="code"    />
     </resultMap>
 
+    <select id="selectIsAllStore" resultType="map" parameterType="map">
+        SELECT * FROM system_store  s WHERE s.id=  (SELECT prentid FROM system_store  WHERE id=#{id}) AND s.status=1
+    </select>
+
     <sql id="selectSystemStoreVo">
         select id, name, type, status, createtime, prentid, province, city, county, area, address, code from system_store
     </sql>

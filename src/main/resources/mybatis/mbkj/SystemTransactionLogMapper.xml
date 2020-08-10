@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.systemtransactionlog.mapper.SystemTransactionLogMapper">
+
+    <resultMap type="SystemTransactionLog" id="SystemTransactionLogResult">
+        <result property="id" column="id"/>
+        <result property="clientid" column="clientid"/>
+        <result property="userid" column="userid"/>
+        <result property="standardid" column="standardid"/>
+        <result property="mytarget" column="mytarget"/>
+        <result property="usertargetid" column="usertargetid"/>
+        <result property="createtime" column="createtime"/>
+        <result property="assettype" column="assettype"/>
+    </resultMap>
+
+    <sql id="selectSystemTransactionLogVo">
+        select id, clientid, userid, standardid, mytarget, usertargetid, createtime, assettype from system_transaction_log
+    </sql>
+
+    <select id="selectTransactionLog" parameterType="map" resultType="map">
+          SELECT c.name ,a.mytarget ,c.unit,d.username,  DATE_FORMAT( a.createtime , '%Y-%m-%d' ) as createtime, a.assettype
+        FROM system_transaction_log  a LEFT JOIN client_user b ON a.clientid=b.id
+        LEFT JOIN st_standard c ON a.standardid=c.id LEFT JOIN sys_user_admin d
+        ON a.userid=d.id
+        WHERE  a.clientid=#{clientid} and  a.standardid=#{standardid}
+        order by a.createtime
+    </select>
+
+    <select id="selectTransactionLogPancake" parameterType="map" resultType="map">
+        SELECT
+        c.id,c.name , c.unit,d.username,  DATE_FORMAT( a.`createtime`, '%Y-%m-%d' ) AS createtime,
+        SUM(CASE WHEN a.assettype = 1 THEN a.mytarget ELSE 0 END) AS totalmytarget,
+        SUM(CASE WHEN a.assettype = 2 THEN a.mytarget ELSE 0 END) AS negativemytarget
+        FROM
+        system_transaction_log
+        a LEFT JOIN client_user b ON a.clientid=b.id
+        LEFT JOIN st_standard c ON a.standardid=c.id LEFT JOIN sys_user_admin d
+        ON a.userid=d.id WHERE  a.clientid=#{clientid}    GROUP BY a.standardid ORDER BY c.sorts
+    </select>
+
+    <select id="selectSystemTransactionLogList" parameterType="SystemTransactionLog"
+            resultMap="SystemTransactionLogResult">
+        <include refid="selectSystemTransactionLogVo"/>
+        <where>
+            <if test="clientid != null ">and clientid = #{clientid}</if>
+            <if test="userid != null ">and userid = #{userid}</if>
+            <if test="standardid != null ">and standardid = #{standardid}</if>
+            <if test="mytarget != null  and mytarget != ''">and mytarget = #{mytarget}</if>
+            <if test="usertargetid != null ">and usertargetid = #{usertargetid}</if>
+            <if test="createtime != null ">and createtime = #{createtime}</if>
+            <if test="assettype != null ">and assettype = #{assettype}</if>
+        </where>
+    </select>
+
+    <select id="selectSystemTransactionLogById" parameterType="Long" resultMap="SystemTransactionLogResult">
+        <include refid="selectSystemTransactionLogVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSystemTransactionLog" parameterType="SystemTransactionLog" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into system_transaction_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clientid != null">clientid,</if>
+            <if test="userid != null">userid,</if>
+            <if test="standardid != null">standardid,</if>
+            <if test="mytarget != null">mytarget,</if>
+            <if test="usertargetid != null">usertargetid,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="assettype != null">assettype,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clientid != null">#{clientid},</if>
+            <if test="userid != null">#{userid},</if>
+            <if test="standardid != null">#{standardid},</if>
+            <if test="mytarget != null">#{mytarget},</if>
+            <if test="usertargetid != null">#{usertargetid},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="assettype != null">#{assettype},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSystemTransactionLog" parameterType="SystemTransactionLog">
+        update system_transaction_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clientid != null">clientid = #{clientid},</if>
+            <if test="userid != null">userid = #{userid},</if>
+            <if test="standardid != null">standardid = #{standardid},</if>
+            <if test="mytarget != null">mytarget = #{mytarget},</if>
+            <if test="usertargetid != null">usertargetid = #{usertargetid},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+            <if test="assettype != null">assettype = #{assettype},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSystemTransactionLogById" parameterType="Long">
+        delete from system_transaction_log where id = #{id}
+    </delete>
+
+    <delete id="deleteSystemTransactionLogByIds" parameterType="String">
+        delete from system_transaction_log where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
