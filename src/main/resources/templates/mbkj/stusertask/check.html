@@ -6,11 +6,17 @@
 <body class="gray-bg">
      <div class="container-div">
 		 <form id="formId">
-		 	<input id="id" th:value="${id}" type="text">
-		 	<input id="month" th:value="${month}" type="text">
+		 	<input id="id" th:value="${id}" type="hidden">
+		 	<input id="month" th:value="${month}" type="hidden">
 		 </form>
 		<div class="row">
 			<div class="col-sm-12 select-table table-striped">
+				<div class="select-list">
+					<li>
+						<label>总分：</label>
+						<input type="text" id="score" readonly/>
+					</li>
+				</div>
 				<table id="bootstrap-table"></table>
 			</div>
 		</div>
@@ -33,7 +39,13 @@
                 columns: [
 				{
 					field : 'name',
-					title : '项目'
+					title : '项目',
+					formatter: function(value, row, index){
+						debugger
+						if(index==0){
+							$("#score").val(row.totlescore);
+						}
+					}
 				},
 				{
 					field : 'score',

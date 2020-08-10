@@ -32,6 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             (a.status=1 or a.status=3)
             <if test="storeid != null  and storeid != ''"> and a.storeid = #{storeid}</if>
+            <if test="username != null  and username != ''"> and a.username like concat('%', #{username}, '%')</if>
         </where>
     </select>
 

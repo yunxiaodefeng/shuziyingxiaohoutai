@@ -100,6 +100,7 @@ public class SysUserAdminServiceImpl implements ISysUserAdminService
     public List<SysUserAdminBonus> selectUserList(SysUserAdminBonus userAdmin) {
         Map<String,Object> map=new HashMap<>();
         map.put("storeid",userAdmin.getStoreid());
+        map.put("username",userAdmin.getUsername());
         return sysUserAdminMapper.selectUserList(map);
     }
 }

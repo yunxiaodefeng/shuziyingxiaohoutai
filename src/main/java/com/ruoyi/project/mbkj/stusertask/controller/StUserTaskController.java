@@ -176,6 +176,11 @@ public class StUserTaskController extends BaseController
                 return name2.compareTo(name1);
             }
         });
+        if(resloutlist.size()>0){
+            resloutlist.get(0).put("totlescore",all);
+        }else {
+            resloutlist.get(0).put("totlescore",0);
+        }
         return getDataTableTask(resloutlist, (String.valueOf(all)));
     }
 
@@ -221,9 +226,13 @@ public class StUserTaskController extends BaseController
                     }
                 }
             }
+
         }
-
-
+        if(listMap.size()>0){
+            listMap.get(0).put("totlescore",allcore);
+        }else {
+            listMap.get(0).put("totlescore",0);
+        }
         return getDataTableTask(listMap, (String.valueOf(allcore)));
     }
 
