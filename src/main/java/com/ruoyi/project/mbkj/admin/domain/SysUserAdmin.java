@@ -29,7 +29,7 @@ public class SysUserAdmin extends BaseEntity
     @Excel(name = "员工名称")
     private String username;
     
-    @Excel(name = "性别",readConverterExp = "0=未知,1=男,2=女")
+ /*   @Excel(name = "性别",readConverterExp = "0=未知,1=男,2=女")*/
     private String sex;
     
     /** 手机号 */
