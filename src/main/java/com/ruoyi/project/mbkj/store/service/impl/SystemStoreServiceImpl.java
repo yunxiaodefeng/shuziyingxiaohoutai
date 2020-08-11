@@ -151,7 +151,7 @@ public class SystemStoreServiceImpl implements ISystemStoreService
                 ztree.setId(systemStore.getId());
                 ztree.setpId(systemStore.getPrentid());
                 ztree.setName(systemStore.getName());
-              
+                ztree.setTitle(systemStore.getName());
                 if (isCheck)
                 {
                    /* ztree.setChecked(roleDeptList.contains(dept.getDeptId() + dept.getDeptName()));*/

@@ -42,9 +42,10 @@
 					title : '项目',
 					formatter: function(value, row, index){
 						debugger
-						if(index==0){
+						if(index==0 && row.totlescore){
 							$("#score").val(row.totlescore);
 						}
+						return value;
 					}
 				},
 				{
@@ -74,12 +75,13 @@
         
         /* 添加用户-选择用户-提交 */
 		function submitHandler() {
-			var rows = $.table.selectFirstColumns();
-			if (rows.length == 0) {
-       			$.modal.alertWarning("请至少选择一条记录");
-       			return;
-       		}
-			alert(rows.join());
+//			layer.close(1);
+//			var rows = $.table.selectFirstColumns();
+//			if (rows.length == 0) {
+//       			$.modal.alertWarning("请至少选择一条记录");
+//       			return;
+//       		}
+//			alert(rows.join());
 		}
     </script>
 </body>

@@ -50,7 +50,6 @@ public class SystemTransactionLogController extends BaseController
     /**
      * 查询交易记录列表
      */
-    @RequiresPermissions("mbkj:systemtransactionlog:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SystemTransactionLog systemTransactionLog)

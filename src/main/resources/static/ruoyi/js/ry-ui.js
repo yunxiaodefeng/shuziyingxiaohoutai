@@ -349,6 +349,7 @@ var table = {
                     search.isAsc = params.order;
     		        return search;
     		    }
+    		    debugger
     		    if($.common.isNotEmpty(tableId)){
     				$("#" + tableId).bootstrapTable('refresh', params);
     			} else{
@@ -356,6 +357,43 @@ var table = {
     			}
     		},
     		// 导出数据
+			exportExcelNew: function(formId, tableId, data) {
+				table.set();
+				$.modal.confirm("确定导出所有" + table.options.modalName + "吗？", function() {
+					var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+					var params = $.common.isEmpty(tableId) ? $("#" + table.options.id).bootstrapTable('getOptions') : $("#" + tableId).bootstrapTable('getOptions');
+					params.queryParams = function(params) {
+						var search = $.common.formToJSON(currentId);
+						if($.common.isNotEmpty(data)){
+							$.each(data, function(key) {
+								search[key] = data[key];
+							});
+						}
+						search.pageSize = params.limit;
+						search.pageNum = params.offset / params.limit + 1;
+						search.searchValue = params.search;
+						search.orderByColumn = params.sort;
+						search.isAsc = params.order;
+						return search;
+					}
+					$.modal.loading("正在导出数据，请稍后...");
+					if($.common.isNotEmpty(tableId)){
+
+					}else {
+						$.post(table.options.exportUrl, params, function(result) {
+							if (result.code == web_status.SUCCESS) {
+								window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+							} else if (result.code == web_status.WARNING) {
+								$.modal.alertWarning(result.msg)
+							} else {
+								$.modal.alertError(result.msg);
+							}
+							$.modal.closeLoading();
+						});
+					}
+
+				});
+			},
     		exportExcel: function(formId) {
     			table.set();
     			$.modal.confirm("确定导出所有" + table.options.modalName + "吗？", function() {
@@ -792,6 +830,52 @@ var table = {
             	    }
             	});
             },
+			//同上 增加点击确定关闭的功能
+			openOkClose: function (title, url, width, height, callback) {
+				//如果是移动端，就使用自适应大小弹窗
+				if ($.common.isMobile()) {
+					width = 'auto';
+					height = 'auto';
+				}
+				if ($.common.isEmpty(title)) {
+					title = false;
+				}
+				if ($.common.isEmpty(url)) {
+					url = "/404.html";
+				}
+				if ($.common.isEmpty(width)) {
+					width = 800;
+				}
+				if ($.common.isEmpty(height)) {
+					height = ($(window).height() - 50);
+				}
+				if ($.common.isEmpty(callback)) {
+					callback = function(index, layero) {
+						var iframeWin = layero.find('iframe')[0];
+						iframeWin.contentWindow.submitHandler(index, layero);
+					}
+				}
+				layer.open({
+					type: 2,
+					area: [width + 'px', height + 'px'],
+					fix: false,
+					//不固定
+					maxmin: true,
+					shade: 0.3,
+					title: title,
+					content: url,
+					btn: ['确定', '关闭'],
+					// 弹层外区域关闭
+					shadeClose: true,
+					yes: function(index, layero){
+						//do something
+						layer.close(index); //如果设定了yes回调，需进行手工关闭
+					},
+					cancel: function(index) {
+						return true;
+					}
+				});
+			},
 			//弹出层显示详情
 			openShow: function (title, url, width, height, callback) {
 				//如果是移动端，就使用自适应大小弹窗

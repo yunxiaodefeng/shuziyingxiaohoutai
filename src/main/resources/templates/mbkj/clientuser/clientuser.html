@@ -7,6 +7,20 @@
     <th:block th:include="include :: ztree-css"/>
 </head>
 <style>
+    /* 表格样式 */
+
+    .table>tbody>tr>td {
+        border: 0px;
+        /*text-align: center;*/
+    }
+
+    .bootstrap-table .table thead>tr>th {
+        /*text-align: center;*/
+    }
+
+    .table thead {
+        background: #ebeaea;
+    }
 </style>
 <body class="gray-bg">
 
@@ -77,14 +91,14 @@
                 <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="mbkj:clientuser:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-                   shiro:hasPermission="mbkj:clientuser:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-                   shiro:hasPermission="mbkj:clientuser:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
+                <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()"-->
+                   <!--shiro:hasPermission="mbkj:clientuser:edit">-->
+                    <!--<i class="fa fa-edit"></i> 修改-->
+                <!--</a>-->
+                <!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"-->
+                   <!--shiro:hasPermission="mbkj:clientuser:remove">-->
+                    <!--<i class="fa fa-remove"></i> 删除-->
+                <!--</a>-->
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="mbkj:clientuser:export">
                     <i class="fa fa-download"></i> 导出
                 </a>
@@ -112,7 +126,7 @@
                         <span th:text="${c.name}"></span>：
                         <ul class="list-unstyled list-inline">
                             <li th:each="wo,woStat:${c.detail}">
-                                <label class="radio-box"> <input type="radio"  th:value="${wo.id}"  th:name="${wo.identification}+',1'" th:text="${wo.title}"  > </label>
+                                <label class="radio-box"> <input type="radio"  th:value="${wo.id}"  th:name="${wo.identification}" th:text="${wo.title}"  > </label>
                             </li>
                         </ul>
                         </ul>
@@ -229,7 +243,7 @@
                 {
                     field: 'lablelist',
                     title: '标签',
-                    width: "100",
+                    width: "200",
                     cellStyle: formatTableUnit,
 //                    formatter: function (value, row, index) {
 //                        if (value) {
@@ -245,7 +259,15 @@
                 },
                 {
                     field: 'username',
-                    title: '员工姓名'
+                    title: '员工姓名',
+                    width: "100",
+                    formatter: function (value, row, index) {
+                        if(value){
+                            return " &nbsp;&nbsp;  "+value;
+                        }else {
+                            return " &nbsp;&nbsp;&nbsp;-  ";
+                        }
+                    }
                 },
 
 
@@ -316,6 +338,7 @@
                 html.push('<p > 标签详情：<span style="color: red">' + value + '</span></p>');
             }
         });
+        html.push("")
         return html.join('');
     }
     function paramsMatter(value, row, index, field) {
@@ -329,10 +352,11 @@
     function formatTableUnit(value, row, index) {
         return {
             css: {
-                'white-space': 'nowrap',
-                'text-overflow': 'ellipsis',
-                'overflow': 'hidden',
-                'max-width': '150px'
+                "min-width": "100px",
+                "white-space": "nowrap",
+                "text-overflow": "ellipsis",
+                "overflow": "hidden",
+                "max-width": "100px"
             }
         }
     }

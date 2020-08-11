@@ -189,14 +189,12 @@ public class ClientUserController extends BaseController {
             if ("libid-".equals(name)) {
                 userLevel.append(value);
             }else  if(name.indexOf("libid-")>-1){
-                if(name.indexOf(",1")>-1){
+//                if(name.indexOf(",1")>-1){
                     sb.append(value+",");
-                }
-                if(name.indexOf(",3")>-1){
-                     sbMoreCheck.append(value+",");
-                }
-
-
+//                }
+//                if(name.indexOf(",3")>-1){
+//                     sbMoreCheck.append(value+",");
+//                }
             }
         }
         if(sb.toString().lastIndexOf(",")>-1){
@@ -204,11 +202,11 @@ public class ClientUserController extends BaseController {
         }else {
              sear=sb.toString();
         }
-        if(sbMoreCheck.toString().lastIndexOf(",")>-1){
-            searMoreCheck=sbMoreCheck.toString().substring(0,sbMoreCheck.toString().lastIndexOf(","));
-        }else {
-            searMoreCheck=sbMoreCheck.toString();
-        }
+//        if(sbMoreCheck.toString().lastIndexOf(",")>-1){
+//            searMoreCheck=sbMoreCheck.toString().substring(0,sbMoreCheck.toString().lastIndexOf(","));
+//        }else {
+//            searMoreCheck=sbMoreCheck.toString();
+//        }
         Integer countNum = clientUserService.selectClientUserListcountNum(clientUser,num,size,bycolumn,byAsc,userLevel,sear,searMoreCheck);
         List<ClientUser> list = clientUserService.getclientUserList(clientUser,num,size,bycolumn,byAsc,userLevel,sear,searMoreCheck);
         return getDataTableNew(list,countNum);
@@ -274,12 +272,12 @@ public class ClientUserController extends BaseController {
             if ("libid-".equals(name)) {
                 userLevel.append(value);
             }else  if(name.indexOf("libid-")>-1){
-                if(name.indexOf(",1")>-1){
+//                if(name.indexOf(",1")>-1){
                     sb.append(value+",");
-                }
-                if(name.indexOf(",3")>-1){
-                    sbMoreCheck.append(value+",");
-                }
+//                }
+//                if(name.indexOf(",3")>-1){
+//                    sbMoreCheck.append(value+",");
+//                }
             }
         }
         if(sb.toString().lastIndexOf(",")>-1){
@@ -287,11 +285,11 @@ public class ClientUserController extends BaseController {
         }else {
             sear=sb.toString();
         }
-        if(sbMoreCheck.toString().lastIndexOf(",")>-1){
-            searMoreCheck=sbMoreCheck.toString().substring(0,sbMoreCheck.toString().lastIndexOf(","));
-        }else {
-            searMoreCheck=sbMoreCheck.toString();
-        }
+//        if(sbMoreCheck.toString().lastIndexOf(",")>-1){
+//            searMoreCheck=sbMoreCheck.toString().substring(0,sbMoreCheck.toString().lastIndexOf(","));
+//        }else {
+//            searMoreCheck=sbMoreCheck.toString();
+//        }
         Integer count = clientUserService.selectClientUserListcountNum(clientUser,num,size,bycolumn,byAsc,userLevel,sear,searMoreCheck);
         int pageCount=count%size==0?(count/size):(count/size+1);
         List<ClientUser> listAll =new ArrayList<>();

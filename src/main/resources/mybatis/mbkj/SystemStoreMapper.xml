@@ -29,7 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSystemStoreList" parameterType="SystemStore" resultMap="SystemStoreResult">
         <include refid="selectSystemStoreVo"/>
-        <where>  
+        <where>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="type != null  and type != ''"> and type = #{type}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>

@@ -76,13 +76,13 @@ public class ClientUserServiceImpl implements IClientUserService
         if(StringUtils.isNotEmpty(sear)){
             map.put("list",Convert.toStrArray(sear));
         }
-        String[] stringsMoreCheck = Convert.toStrArray(searMoreCheck);
-        if(StringUtils.isNotEmpty(searMoreCheck)){
-            map.put("listMoreCheck",Convert.toStrArray(searMoreCheck));
-        }
-        if(StringUtils.isNotEmpty(sear) && StringUtils.isNotEmpty(searMoreCheck)){
-            map.put("showand",1);
-        }
+//        String[] stringsMoreCheck = Convert.toStrArray(searMoreCheck);
+//        if(StringUtils.isNotEmpty(searMoreCheck)){
+//            map.put("listMoreCheck",Convert.toStrArray(searMoreCheck));
+//        }
+//        if(StringUtils.isNotEmpty(sear) && StringUtils.isNotEmpty(searMoreCheck)){
+//            map.put("showand",1);
+//        }
         map.put("userLevel",userLevel.toString());
         return clientUserMapper.getclientUserList(map);
     }
@@ -113,13 +113,13 @@ public class ClientUserServiceImpl implements IClientUserService
         if(StringUtils.isNotEmpty(sear)){
             map.put("list",Convert.toStrArray(sear));
         }
-        String[] stringsMoreCheck = Convert.toStrArray(searMoreCheck);
-        if(StringUtils.isNotEmpty(searMoreCheck)){
-            map.put("listMoreCheck",Convert.toStrArray(searMoreCheck));
-        }
-        if(StringUtils.isNotEmpty(sear) && StringUtils.isNotEmpty(searMoreCheck)){
-            map.put("showand",1);
-        }
+//        String[] stringsMoreCheck = Convert.toStrArray(searMoreCheck);
+//        if(StringUtils.isNotEmpty(searMoreCheck)){
+//            map.put("listMoreCheck",Convert.toStrArray(searMoreCheck));
+//        }
+//        if(StringUtils.isNotEmpty(sear) && StringUtils.isNotEmpty(searMoreCheck)){
+//            map.put("showand",1);
+//        }
         map.put("userLevel",userLevel.toString());
         return clientUserMapper.selectClientUserListcountNum(map);
     }

@@ -1,12 +1,11 @@
 package com.ruoyi.project.mbkj.store.domain;
 
-import java.util.Date;
-
+import com.ruoyi.framework.aspectj.lang.annotation.Excel;
+import com.ruoyi.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.ruoyi.framework.aspectj.lang.annotation.Excel;
-import com.ruoyi.framework.web.domain.BaseEntity;
+import java.util.Date;
 
 /**
  * 网点对象 system_store
@@ -62,7 +61,16 @@ public class SystemStore extends BaseEntity
     private String code;
     
     private Date createtime;
-    
+
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Date getCreatetime() {
 		return createtime;

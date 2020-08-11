@@ -64,42 +64,27 @@
         SELECT count(1) from (
         SELECT cu.id
         FROM client_user cu
-        <where>
-            <if test="userLevel != null  and userLevel != ''">and cu.grade =#{userLevel}</if>
-        </where>
         LEFT JOIN system_dic grad ON cu.grade = grad.`key` AND grad.type = 'clienttype'
         LEFT JOIN system_store ss ON cu.storeid = ss.id
         LEFT JOIN (SELECT id,username FROM sys_user_admin WHERE STATUS=1) sysuser ON cu.userid = sysuser.id
         <if test="_parameter.containsKey('list')">
-            LEFT JOIN (
-
+            RIGHT JOIN (
             SELECT a.clientid,GROUP_CONCAT(b.`title` ORDER BY b.`title` SEPARATOR '、') AS titles ,
             a.content AS content FROM (
-
             SELECT GROUP_CONCAT(a1.content ORDER BY a1.content SEPARATOR ',') AS content ,clientid
             FROM  client_userdetail  a1 WHERE content IS NOT NULL   GROUP BY a1.clientid  ORDER BY NULL
-
             ) a, system_libdetail b WHERE FIND_IN_SET(b.id,a.content )
 
-            <where>
                 <if test="_parameter.containsKey('list')">
-                    <foreach item="id" collection="list" open="(" separator="and" close=")">
-                        FIND_IN_SET(#{id},a.content)
+                    <foreach item="id" collection="list"     >
+                      and  FIND_IN_SET(#{id},a.content)
                     </foreach>
                 </if>
-                <if test="_parameter.containsKey('showand')">
-                    and
-                </if>
-                <if test="_parameter.containsKey('listMoreCheck')">
-                    <foreach item="id" collection="listMoreCheck" open="(" separator="and" close=")">
-                        FIND_IN_SET(#{id},a.content)
-                    </foreach>
-                </if>
-            </where>
             GROUP BY a.clientid  ORDER BY NULL
             ) m ON cu.`id`=m.clientid
         </if>
         <where>
+            <if test="userLevel != null  and userLevel != ''">and cu.grade =#{userLevel}</if>
             <if test="nickname != null  and nickname != ''">and cu.name like concat('%', #{nickname}, '%')</if>
             <if test="makers != null  and makers != ''">and cu.makers like concat('%', #{makers}, '%')</if>
             <if test="phone != null  and phone != ''">and cu.phone like concat('%', #{phone}, '%')</if>
@@ -115,18 +100,12 @@
 
         SELECT DISTINCT cu.id,
         cu.name,cu.sex,cu.phone,sysuser.username,
-        grad.VALUE AS 'gradename',m.`content`,m.`titles` AS lablelist
-        FROM (
-        SELECT * from client_user cu
-        <where>
-            <if test="userLevel != null  and userLevel != ''">and cu.grade =#{userLevel}</if>
-        </where>
-        ORDER BY ${orderByParames} ${byAsc}
-        )cu
+        grad.VALUE AS 'gradename',m.`content`,CONCAT(m.`titles`,"   ") AS lablelist
+        FROM  client_user cu
         LEFT JOIN system_dic grad ON cu.grade = grad.`key` AND grad.type = 'clienttype'
         LEFT JOIN system_store ss ON cu.storeid = ss.id
         LEFT JOIN (SELECT id,username FROM sys_user_admin WHERE STATUS=1) sysuser ON cu.userid = sysuser.id
-        LEFT JOIN (
+        RIGHT JOIN (
 
         SELECT a.clientid,GROUP_CONCAT(b.`title` ORDER BY b.`title` SEPARATOR '、') AS titles ,
         a.content AS content FROM (
@@ -136,31 +115,23 @@
 
         ) a, system_libdetail b WHERE FIND_IN_SET(b.id,a.content )
 
-        <where>
             <if test="_parameter.containsKey('list')">
-                <foreach item="id" collection="list" open="(" separator="and" close=")">
-                    FIND_IN_SET(#{id},a.content)
+                <foreach item="id" collection="list"   >
+                  and  FIND_IN_SET(#{id},a.content)
                 </foreach>
             </if>
-            <if test="_parameter.containsKey('showand')">
-                and
-            </if>
-            <if test="_parameter.containsKey('listMoreCheck')">
-                <foreach item="id" collection="listMoreCheck" open="(" separator="and" close=")">
-                    FIND_IN_SET(#{id},a.content)
-                </foreach>
-            </if>
-        </where>
+
         GROUP BY a.clientid  ORDER BY NULL
         ) m ON cu.`id`=m.clientid
         <where>
+            <if test="userLevel != null  and userLevel != ''">and cu.grade =#{userLevel}</if>
             <if test="nickname != null  and nickname != ''">and cu.name like concat('%', #{nickname}, '%')</if>
             <if test="makers != null  and makers != ''">and cu.makers like concat('%', #{makers}, '%')</if>
             <if test="phone != null  and phone != ''">and cu.phone like concat('%', #{phone}, '%')</if>
             <if test="name != null  and name != ''">and sysuser.username like concat('%', #{name}, '%')</if>
             <if test="storeid !=null and storeid != ''">and ss.id=#{storeid}</if>
         </where>
-
+        ORDER BY ${orderByParames} ${byAsc}
         limit #{num} ,#{size}
 
     </select>

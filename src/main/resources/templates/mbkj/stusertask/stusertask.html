@@ -7,6 +7,23 @@
     <th:block th:include="include :: layout-latest-css"/>
     <th:block th:include="include :: ztree-css"/>
 </head>
+<style>
+    /* 表格样式 */
+
+    .table>tbody>tr>td {
+        border: 0px;
+        text-align: center;
+    }
+
+    .bootstrap-table .table thead>tr>th {
+        text-align: center;
+    }
+
+    .table thead {
+        background: #ebeaea;
+    }
+</style>
+
 <body class="gray-bg">
 <div class="ui-layout-west">
     <div class="box box-main">
@@ -45,10 +62,6 @@
                                 <input type="text" name="username"/>
                             </li>
                             <li>
-                                <label>员工姓名：</label>
-                                <input type="text" name="username"/>
-                            </li>
-                            <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
@@ -58,18 +71,18 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="mbkj:stusertask:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="mbkj:stusertask:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
+                <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="mbkj:stusertask:add">-->
+                    <!--<i class="fa fa-plus"></i> 添加-->
+                <!--</a>-->
+                <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="mbkj:stusertask:edit">-->
+                    <!--<i class="fa fa-edit"></i> 修改-->
+                <!--</a>-->
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="mbkj:stusertask:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="mbkj:stusertask:export">-->
-                    <!--<i class="fa fa-download"></i> 导出-->
-                <!--</a>-->
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="mbkj:stusertask:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -148,6 +161,7 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "绩效",
+                sidePagination:'client',
                 columns: [
 
                 {
@@ -193,7 +207,7 @@
 
         function  getBonusDetails(userid) {
             var month=$("#datetimepicker-demo-2").val();
-            $.modal.open("绩效详情", prefix + "/check/"+userid+"/"+month);
+            $.modal.openOkClose("绩效详情", prefix + "/check/"+userid+"/"+month);
         }
 
     </script>
