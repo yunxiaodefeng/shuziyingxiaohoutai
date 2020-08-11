@@ -108,7 +108,7 @@ public class StUsermonthtargetController extends BaseController
     	
     	List<StStandard> stStandardList =  stUsermonthtargetService.selectStanderList();
     	
-    	String headerArray = "序号,名称,贡献,新建信息,完善信息,计划维护,跟进客户";
+    	String headerArray = "名称,贡献,新建信息,完善信息,计划维护,跟进客户,";
     	
     	for (StStandard stStandard : stStandardList) {
     		headerArray = headerArray + stStandard.getName()+",";
@@ -237,7 +237,7 @@ public class StUsermonthtargetController extends BaseController
     	
     	List<StStandard> stStandardList =  stUsermonthtargetService.selectStanderList();
     	
-    	String headerArray = "序号,名称,贡献,新建信息,完善信息,计划维护,跟进客户";
+    	String headerArray = "名称,贡献,新建信息,完善信息,计划维护,跟进客户,";
     	
     	for (StStandard stStandard : stStandardList) {
     		headerArray = headerArray + stStandard.getName()+",";
