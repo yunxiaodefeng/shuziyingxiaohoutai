@@ -63,7 +63,7 @@
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="chongzhi()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
                         </ul>
                     </div>
@@ -98,7 +98,10 @@
         var editFlag = [[${@permission.hasPermi('mbkj:stusertask:edit')}]];
         var removeFlag = [[${@permission.hasPermi('mbkj:stusertask:remove')}]];
         var prefix = ctx + "mbkj/stusertask";
+        function  chongzhi() {
+          location.href=location.href
 
+        }
         $("#datetimepicker-demo-2").datetimepicker({
             format: 'yyyy-mm',
             weekStart: 1,
@@ -164,11 +167,7 @@
                 sidePagination:'client',
                 columns: [
 
-                {
-                    field: 'id',
-                    title: 'null',
-                    visible: false
-                },
+
                 {
                     field: 'username',
                     title: '成员'

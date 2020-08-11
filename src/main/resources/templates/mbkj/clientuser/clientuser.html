@@ -138,7 +138,7 @@
                         <li th:each="wo,woStat:${c.detail}">
                             <!--<label class="radio-box"> <input type="radio"  th:value="${wo.id}"  th:name="${wo.identification}" th:text="${wo.title}"  > </label>-->
                             <label class="check-box"  >
-                                <input type="checkbox"  th:name="${wo.identification}+',3'"th:value="${wo.id}" th:text="${wo.title}"  th:checked="${wo.checked}" > </label>
+                                <input type="checkbox"  th:name="${wo.identification}+',3'+${wo.id}"  th:value="${wo.id}" th:text="${wo.title}"  th:checked="${wo.checked}" > </label>
 
                         </li>
                     </ul>
