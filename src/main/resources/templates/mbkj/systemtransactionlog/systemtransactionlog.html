@@ -12,12 +12,12 @@
                     <!--<input id="selectListDefault"  th:value="${selectListDefault}"  type="hidden">-->
                     <div class="select-list">
                         <ul>
-                            <li>
-                                <select id="standardid"      name="standardid" class="form-control m-b" >
-                                    <!--<option value="">请选择</option>-->
-                                    <option  th:each="wo:${selectList}"  readonly="readonly" th:value="${wo.id}" th:text="${wo.name}" ></option>
-                                </select>
-                            </li>
+                            <!--<li>-->
+                                <!--<select id="standardid"      name="standardid" class="form-control m-b" >-->
+                                    <!--&lt;!&ndash;<option value="">请选择</option>&ndash;&gt;-->
+                                    <!--<option  th:each="wo:${selectList}"  readonly="readonly" th:value="${wo.id}" th:text="${wo.name}" ></option>-->
+                                <!--</select>-->
+                            <!--</li>-->
                             <!--<li>-->
                                 <!--<label>资产类型：</label>-->
                                 <!--<select name="assettype">-->
@@ -27,8 +27,8 @@
                                 <!--</select>-->
                             <!--</li>-->
                             <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                <!--<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>-->
+                                <!--<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>-->
                                 <a class="btn btn-info btn-rounded btn-sm" onclick="back()"><i class="fa fa-refresh"></i>&nbsp;返回</a>
                             </li>
                         </ul>
@@ -73,14 +73,15 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "交易记录",
-                columns: [{
-                    checkbox: false
-                },
-                {
-                    field: 'id',
-                    title: '主键',
-                    visible: false
-                },
+                columns: [
+//                        {
+//                    checkbox: false
+//                },
+//                {
+//                    field: 'id',
+//                    title: '主键',
+//                    visible: false
+//                },
                 {
                     field: 'name',
                     title: '指标',
