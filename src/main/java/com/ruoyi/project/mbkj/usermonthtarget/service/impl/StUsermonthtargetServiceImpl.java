@@ -4,6 +4,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.mbkj.usermonthtarget.mapper.StUsermonthtargetMapper;
+import com.ruoyi.project.mbkj.standard.domain.StStandard;
+import com.ruoyi.project.mbkj.standard.mapper.StStandardMapper;
 import com.ruoyi.project.mbkj.usermonthtarget.domain.StUsermonthtarget;
 import com.ruoyi.project.mbkj.usermonthtarget.service.IStUsermonthtargetService;
 import com.ruoyi.project.ro.SelectTargetParam;
@@ -22,6 +24,9 @@ public class StUsermonthtargetServiceImpl implements IStUsermonthtargetService
 {
     @Autowired
     private StUsermonthtargetMapper stUsermonthtargetMapper;
+    
+    @Autowired
+    private StStandardMapper stStandardMapper;
 
     /**
      * 查询数据统计
@@ -117,5 +122,10 @@ public class StUsermonthtargetServiceImpl implements IStUsermonthtargetService
 	public List<OtherTargetResult> selectUserOthertarget(SelectTargetParam selectTargetParam) {
 		// TODO Auto-generated method stub
 		return stUsermonthtargetMapper.selectUserOthertarget(selectTargetParam);
+	}
+	
+	public List<StStandard> selectStanderList() {
+		// TODO Auto-generated method stub
+		return stStandardMapper.selectStStandardList(new StStandard());
 	}
 }

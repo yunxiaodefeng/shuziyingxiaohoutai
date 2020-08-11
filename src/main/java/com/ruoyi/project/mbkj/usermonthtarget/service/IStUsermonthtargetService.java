@@ -1,6 +1,8 @@
 package com.ruoyi.project.mbkj.usermonthtarget.service;
 
 import java.util.List;
+
+import com.ruoyi.project.mbkj.standard.domain.StStandard;
 import com.ruoyi.project.mbkj.usermonthtarget.domain.StUsermonthtarget;
 import com.ruoyi.project.ro.SelectTargetParam;
 import com.ruoyi.project.vo.OtherTargetResult;
@@ -71,4 +73,6 @@ public interface IStUsermonthtargetService
 	public TargetResult selectUser5target(SelectTargetParam selectTargetParam);
 
 	public List<OtherTargetResult> selectUserOthertarget(SelectTargetParam selectTargetParam);
+
+	public List<StStandard> selectStanderList();
 }

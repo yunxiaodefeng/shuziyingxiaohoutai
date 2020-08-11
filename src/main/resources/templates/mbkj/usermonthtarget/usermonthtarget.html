@@ -79,7 +79,7 @@
 						onclick="$.operate.removeAll()"
 						shiro:hasPermission="mbkj:usermonthtarget:remove"> <i
 						class="fa fa-remove"></i> 删除
-					</a> <a class="btn btn-warning" onclick="$.table.exportExcel()"
+					</a> <a class="btn btn-warning" onclick="exportFile()"
 						shiro:hasPermission="mbkj:usermonthtarget:export"> <i
 						class="fa fa-download"></i> 导出
 					</a>
@@ -358,7 +358,19 @@
 		
 		$('#btnRefresh').click(function() {
 			queryDeptTree();
-		});
+		})
+		
+		function exportFile(){
+			var startTime1  = $("#startTime").val();
+			var endTime1  = $("#endTime").val();
+			if(treeNodeId == ''){
+				location.href=prefix+"/export1"+"/"+startTime1+"/"+endTime1;
+			}else{
+				var storeid =  treeNodeId;
+				location.href=prefix+"/export2"+"/"+startTime1+"/"+endTime1+"/"+storeid;
+			}
+			
+		};
 		
 		function searchData(){
        		
