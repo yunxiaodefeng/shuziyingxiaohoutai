@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.systemwechatmenu.mapper.SystemWechatMenuMapper">
+    
+    <resultMap type="SystemWechatMenu" id="SystemWechatMenuResult">
+        <result property="id"    column="id"    />
+        <result property="icon"    column="icon"    />
+        <result property="btnname"    column="btnname"    />
+        <result property="paytime"    column="paytime"    />
+        <result property="endtime"    column="endtime"    />
+        <result property="parentid"    column="parentid"    />
+        <result property="ispay"    column="ispay"    />
+        <result property="isshow"    column="isshow"    />
+        <result property="iscreate"    column="iscreate"    />
+        <result property="sortid"    column="sortid"    />
+        <result property="pathurl"    column="pathurl"    />
+        <result property="parentName" column="parent_name" />
+    </resultMap>
+
+    <sql id="selectSystemWechatMenuVo">
+        select id, icon, btnname, paytime, endtime, parentid, ispay, isshow, iscreate, sortid, pathurl from system_wechat_menu
+    </sql>
+
+    <select id="selectTree" parameterType="map" resultType="com.ruoyi.project.mbkj.systemwechatmenu.domain.TreeNode">
+        SELECT id, icon, btnname,parentid,iscreate,pathurl  FROM system_wechat_menu WHERE ispay=0 AND isshow=0  and parentid=#{id}
+        ORDER BY sortid
+    </select>
+
+
+    <select id="selectSystemWechatMenuList" parameterType="SystemWechatMenu" resultMap="SystemWechatMenuResult">
+        <include refid="selectSystemWechatMenuVo"/>
+        <where>  
+            <if test="icon != null  and icon != ''"> and icon = #{icon}</if>
+            <if test="btnname != null  and btnname != ''"> and btnname like concat('%', #{btnname}, '%')</if>
+            <if test="paytime != null  and paytime != ''"> and paytime = #{paytime}</if>
+            <if test="endtime != null  and endtime != ''"> and endtime = #{endtime}</if>
+            <if test="parentid != null "> and parentid = #{parentid}</if>
+            <if test="ispay != null "> and ispay = #{ispay}</if>
+            <if test="isshow != null "> and isshow = #{isshow}</if>
+            <if test="iscreate != null "> and iscreate = #{iscreate}</if>
+            <if test="sortid != null "> and sortid = #{sortid}</if>
+            <if test="pathurl != null  and pathurl != ''"> and pathurl = #{pathurl}</if>
+        </where>
+        order by parentid
+    </select>
+    
+    <select id="selectSystemWechatMenuById" parameterType="Long" resultMap="SystemWechatMenuResult">
+        select t.id, t.icon, t.btnname, t.paytime, t.endtime, t.parentid, t.ispay, t.isshow, t.iscreate, t.sortid, t.pathurl, p.btnname as parent_name
+        from system_wechat_menu t
+        left join system_wechat_menu p on p.id = t.parentid
+        where t.id = #{id}
+    </select>
+        
+    <insert id="insertSystemWechatMenu" parameterType="SystemWechatMenu" useGeneratedKeys="true" keyProperty="id">
+        insert into system_wechat_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="icon != null">icon,</if>
+            <if test="btnname != null and btnname != ''">btnname,</if>
+            <if test="paytime != null and paytime != ''">paytime,</if>
+            <if test="endtime != null and endtime != ''">endtime,</if>
+            <if test="parentid != null">parentid,</if>
+            <if test="ispay != null">ispay,</if>
+            <if test="isshow != null">isshow,</if>
+            <if test="iscreate != null">iscreate,</if>
+            <if test="sortid != null">sortid,</if>
+            <if test="pathurl != null">pathurl,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="icon != null">#{icon},</if>
+            <if test="btnname != null and btnname != ''">#{btnname},</if>
+            <if test="paytime != null and paytime != ''">#{paytime},</if>
+            <if test="endtime != null and endtime != ''">#{endtime},</if>
+            <if test="parentid != null">#{parentid},</if>
+            <if test="ispay != null">#{ispay},</if>
+            <if test="isshow != null">#{isshow},</if>
+            <if test="iscreate != null">#{iscreate},</if>
+            <if test="sortid != null">#{sortid},</if>
+            <if test="pathurl != null">#{pathurl},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSystemWechatMenu" parameterType="SystemWechatMenu">
+        update system_wechat_menu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="btnname != null and btnname != ''">btnname = #{btnname},</if>
+            <if test="paytime != null and paytime != ''">paytime = #{paytime},</if>
+            <if test="endtime != null and endtime != ''">endtime = #{endtime},</if>
+            <if test="parentid != null">parentid = #{parentid},</if>
+            <if test="ispay != null">ispay = #{ispay},</if>
+            <if test="isshow != null">isshow = #{isshow},</if>
+            <if test="iscreate != null">iscreate = #{iscreate},</if>
+            <if test="sortid != null">sortid = #{sortid},</if>
+            <if test="pathurl != null">pathurl = #{pathurl},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSystemWechatMenuById" parameterType="Long">
+        delete from system_wechat_menu where id = #{id}
+    </delete>
+
+    <delete id="deleteSystemWechatMenuByIds" parameterType="String">
+        delete from system_wechat_menu where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
