@@ -18,7 +18,16 @@ public class TreeNode implements Serializable {
     private Integer parentid;
     private Integer iscreate;
     private String pathurl;
+    private Integer ispay;
     private List<TreeNode> children;
+
+    public Integer getIspay() {
+        return ispay;
+    }
+
+    public void setIspay(Integer ispay) {
+        this.ispay = ispay;
+    }
 
     public String getPathurl() {
         return pathurl;
