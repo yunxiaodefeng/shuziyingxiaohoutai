@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.systemwechatrolemenu.mapper.SystemWechatRoleMenuMapper">
+    
+    <resultMap type="SystemWechatRoleMenu" id="SystemWechatRoleMenuResult">
+        <result property="id"    column="id"    />
+        <result property="roleid"    column="roleid"    />
+        <result property="menuid"    column="menuid"    />
+    </resultMap>
+
+    <sql id="selectSystemWechatRoleMenuVo">
+        select id, roleid, menuid from system_wechat_role_menu
+    </sql>
+
+    <select id="selectSystemWechatRoleMenuList" parameterType="SystemWechatRoleMenu" resultMap="SystemWechatRoleMenuResult">
+        <include refid="selectSystemWechatRoleMenuVo"/>
+        <where>  
+            <if test="roleid != null "> and roleid = #{roleid}</if>
+            <if test="menuid != null "> and menuid = #{menuid}</if>
+        </where>
+    </select>
+    
+    <select id="selectSystemWechatRoleMenuById" parameterType="Long" resultMap="SystemWechatRoleMenuResult">
+        <include refid="selectSystemWechatRoleMenuVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSystemWechatRoleMenu" parameterType="SystemWechatRoleMenu" useGeneratedKeys="true" keyProperty="id">
+        insert into system_wechat_role_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleid != null">roleid,</if>
+            <if test="menuid != null">menuid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleid != null">#{roleid},</if>
+            <if test="menuid != null">#{menuid},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchWechatRoleMenu">
+        insert into system_wechat_role_menu(roleid, menuid) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.roleid},#{item.menuid})
+        </foreach>
+    </insert>
+
+    <update id="updateSystemWechatRoleMenu" parameterType="SystemWechatRoleMenu">
+        update system_wechat_role_menu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleid != null">roleid = #{roleid},</if>
+            <if test="menuid != null">menuid = #{menuid},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSystemWechatRoleMenuByRoleId" parameterType="Long">
+        delete from system_wechat_role_menu where roleid = #{id}
+    </delete>
+    <delete id="deleteSystemWechatRoleMenuById" parameterType="Long">
+        delete from system_wechat_role_menu where id = #{id}
+    </delete>
+
+    <delete id="deleteSystemWechatRoleMenuByIds" parameterType="String">
+        delete from system_wechat_role_menu where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

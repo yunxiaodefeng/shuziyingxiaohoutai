@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增小程序角色')" />
+    <th:block th:include="include :: ztree-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-systemwechatrole-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">名称：</label>
+                <div class="col-sm-8">
+                    <input name="name" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">父级id：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input id="treeId" name="parentid" type="hidden" th:value="${systemWechatRole?.id}"/>
+                        <input class="form-control" type="text" onclick="selectSystemwechatroleTree()" id="treeName" readonly="true" th:value="${systemWechatRole?.name}">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">排序：</label>
+                <div class="col-sm-8">
+                    <input name="sort" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否显示：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('sys_mystatus')}">
+                        <input type="radio" th:id="${'isshow_' + dict.dictCode}" name="isshow" th:value="${dict.dictValue}" th:checked="${dict.default}">
+                        <label th:for="${'isshow_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">菜单权限</label>
+                <input id="ztrees" name="ztrees" type="hidden"  />
+                <div class="col-sm-8">
+                    <div id="menuTrees" class="ztree"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: ztree-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "mbkj/systemwechatrole"
+        $(function() {
+            var url = ctx + "mbkj/systemwechatmenu/roleMenuTreeData";
+            var options = {
+                id: "menuTrees",
+                url: url,
+                check: { enable: true },
+                expandLevel: 0
+            };
+            $.tree.init(options);
+        });
+        $("#form-systemwechatrole-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            var menuIds = $.tree.getCheckedNodes();
+            $("#ztrees").val(menuIds);
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-systemwechatrole-add').serialize());
+            }
+        }
+
+        /*小程序角色-新增-选择父部门树*/
+        function selectSystemwechatroleTree() {
+            var options = {
+                title: '小程序角色选择',
+                width: "380",
+                url: prefix + "/selectSystemwechatroleTree/" + $("#treeId").val(),
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+
+        function doSubmit(index, layero){
+            var body = layer.getChildFrame('body', index);
+               $("#treeId").val(body.find('#treeId').val());
+               $("#treeName").val(body.find('#treeName').val());
+               layer.close(index);
+        }
+    </script>
+</body>
+</html>
