@@ -20,14 +20,46 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSystemWechatMenuVo">
-        select id, icon, btnname, paytime, endtime, parentid, ispay, isshow, iscreate, sortid, pathurl from system_wechat_menu
+        select id, icon, btnname, paytime, endtime, parentid, ispay, isshow, iscreate, sortid, pathurl,roletype from system_wechat_menu
     </sql>
 
     <select id="selectTree" parameterType="map" resultType="com.ruoyi.project.mbkj.systemwechatmenu.domain.TreeNode">
-        SELECT id, icon, btnname,parentid,iscreate,pathurl  FROM system_wechat_menu WHERE ispay=0 AND isshow=0  and parentid=#{id}
+        SELECT id, icon, btnname,parentid,iscreate,pathurl,ispay,roletype  FROM system_wechat_menu WHERE roletype=5 and   parentid=#{id}
         ORDER BY sortid
     </select>
 
+
+    <select id="selectWechatMenuTree" parameterType="long" resultType="String">
+    SELECT m.`id`
+    FROM `system_wechat_menu` m
+    LEFT JOIN `system_wechat_role_menu` rm ON m.id = rm.`menuid`
+    WHERE   rm.`roleid`=#{roleId}
+    </select>
+
+    <select id="selectMenuAllByUserId" parameterType="long" resultMap="SystemWechatMenuResult">
+       SELECT a.id, icon,CONCAT(b.`value`,'_',btnname) AS btnname, paytime, endtime, parentid, ispay, isshow, iscreate, sortid, pathurl,roletype
+FROM system_wechat_menu a LEFT JOIN  system_dic b ON a.roletype=b.`key`
+LEFT JOIN system_wechat_role_menu c ON a.`id`=c.menuid WHERE  b.`type`='roletype' AND  c.roleid=#{id}
+    </select>
+
+    <select id="selectSystemWechatMenuListZtrees" parameterType="SystemWechatMenu" resultMap="SystemWechatMenuResult">
+        SELECT a.id, icon,CONCAT(b.`value`,'_',btnname) AS btnname, paytime, endtime, parentid, ispay, isshow, iscreate, sortid, pathurl,roletype
+        FROM system_wechat_menu a LEFT JOIN  system_dic b ON a.roletype=b.`key` WHERE b.`type`='roletype'
+        <where>
+            <if test="icon != null  and icon != ''"> and icon = #{icon}</if>
+            <if test="btnname != null  and btnname != ''"> and btnname like concat('%', #{btnname}, '%')</if>
+            <if test="paytime != null  and paytime != ''"> and paytime = #{paytime}</if>
+            <if test="endtime != null  and endtime != ''"> and endtime = #{endtime}</if>
+            <if test="parentid != null "> and parentid = #{parentid}</if>
+            <if test="ispay != null "> and ispay = #{ispay}</if>
+            <if test="isshow != null "> and isshow = #{isshow}</if>
+            <if test="iscreate != null "> and iscreate = #{iscreate}</if>
+            <if test="sortid != null "> and sortid = #{sortid}</if>
+            <if test="pathurl != null  and pathurl != ''"> and pathurl = #{pathurl}</if>
+            <if test="roletype != null "> and roletype = #{roletype}</if>
+        </where>
+        order by    a.`id`
+    </select>
 
     <select id="selectSystemWechatMenuList" parameterType="SystemWechatMenu" resultMap="SystemWechatMenuResult">
         <include refid="selectSystemWechatMenuVo"/>
@@ -42,6 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="iscreate != null "> and iscreate = #{iscreate}</if>
             <if test="sortid != null "> and sortid = #{sortid}</if>
             <if test="pathurl != null  and pathurl != ''"> and pathurl = #{pathurl}</if>
+            <if test="roletype != null "> and roletype = #{roletype}</if>
         </where>
         order by parentid
     </select>
@@ -66,6 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="iscreate != null">iscreate,</if>
             <if test="sortid != null">sortid,</if>
             <if test="pathurl != null">pathurl,</if>
+            <if test="roletype != null">roletype,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="icon != null">#{icon},</if>
@@ -78,6 +112,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="iscreate != null">#{iscreate},</if>
             <if test="sortid != null">#{sortid},</if>
             <if test="pathurl != null">#{pathurl},</if>
+            <if test="roletype != null">#{roletype},</if>
          </trim>
     </insert>
 
@@ -94,6 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="iscreate != null">iscreate = #{iscreate},</if>
             <if test="sortid != null">sortid = #{sortid},</if>
             <if test="pathurl != null">pathurl = #{pathurl},</if>
+            <if test="roletype != null">roletype = #{roletype},</if>
         </trim>
         where id = #{id}
     </update>

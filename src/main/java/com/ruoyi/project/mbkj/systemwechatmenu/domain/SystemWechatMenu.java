@@ -55,6 +55,26 @@ public class SystemWechatMenu extends TreeEntity
     private String pathurl;
 
     private Long parentid;
+    //权限类型
+    private  Long roletype;
+
+    private Long[] ztrees;
+
+    public Long[] getZtrees() {
+        return ztrees;
+    }
+
+    public void setZtrees(Long[] ztrees) {
+        this.ztrees = ztrees;
+    }
+
+    public Long getRoletype() {
+        return roletype;
+    }
+
+    public void setRoletype(Long roletype) {
+        this.roletype = roletype;
+    }
 
     public Long getParentid() {
         return parentid;

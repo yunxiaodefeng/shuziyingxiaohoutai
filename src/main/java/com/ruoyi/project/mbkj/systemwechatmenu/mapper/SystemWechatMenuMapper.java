@@ -63,4 +63,12 @@ public interface SystemWechatMenuMapper
     public int deleteSystemWechatMenuByIds(String[] ids);
 
     List<TreeNode> selectTree(Map<String, Object> map);
+
+    List<SystemWechatMenu> selectMenuAll();
+
+    List<String> selectWechatMenuTree(Long roleId);
+
+    List<SystemWechatMenu> selectSystemWechatMenuListZtrees(SystemWechatMenu wechatMenu);
+
+    List<SystemWechatMenu> selectMenuAllByUserId(Long id);
 }

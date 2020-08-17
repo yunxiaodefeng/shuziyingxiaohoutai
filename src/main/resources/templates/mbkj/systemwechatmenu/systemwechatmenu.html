@@ -11,10 +11,6 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>图标：</label>
-                                <input type="text" name="icon"/>
-                            </li>
-                            <li>
                                 <label>按钮名称：</label>
                                 <input type="text" name="btnname"/>
                             </li>
@@ -31,33 +27,32 @@
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endEndtime]"/>
                             </li>                
                             <li>
-                                <label>父节点：</label>
-                                <input type="text" name="parentid"/>
-                            </li>
-                            <li>
-                                <label>是否购买 0 是1否：</label>
+                                <label>是否购买：</label>
                                 <select name="ispay" th:with="type=${@dict.getType('sys_mystatus')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <label>是否显示0 是1否：</label>
+                                <label>是否显示：</label>
                                 <select name="isshow" th:with="type=${@dict.getType('sys_mystatus')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <label>是否开发完成0 是1否：</label>
+                                <label>开发进度：</label>
                                 <select name="iscreate" th:with="type=${@dict.getType('sys_mystatus')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <label>排序：</label>
-                                <input type="text" name="sortid"/>
+                                <label>权限类型：</label>
+                                <select name="roletype" th:with="type=${@dict.getType('roletype')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.treeTable.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -92,6 +87,7 @@
         var ispayDatas = [[${@dict.getType('sys_mystatus')}]];
         var isshowDatas = [[${@dict.getType('sys_mystatus')}]];
         var iscreateDatas = [[${@dict.getType('sys_mystatus')}]];
+        var roletype = [[${@dict.getType('roletype')}]];
         var prefix = ctx + "mbkj/systemwechatmenu";
 
         $(function() {
@@ -113,28 +109,28 @@
                 {
                     field: 'icon',
                     title: '图标',
-                    align: 'left'
+                    align: 'center'
                 },
                 {
                     field: 'btnname',
                     title: '按钮名称',
-                    align: 'left'
+                    align: 'center'
                 },
                 {
                     field: 'paytime',
                     title: '购买时间',
-                    align: 'left'
+                    align: 'center'
                 },
                 {
                     field: 'endtime',
                     title: '到期时间',
                     align: 'left'
                 },
-                {
-                    field: 'parentid',
-                    title: '父节点',
-                    align: 'left'
-                },
+//                {
+//                    field: 'parentid',
+//                    title: '父节点',
+//                    align: 'left'
+//                },
                 {
                     field: 'ispay',
                     title: '是否购买',
@@ -157,6 +153,14 @@
                     align: 'left',
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(iscreateDatas, value);
+                    }
+                },
+                {
+                    field: 'roletype',
+                    title: '权限类型',
+                    align: 'left',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(roletype, value);
                     }
                 },
                 {

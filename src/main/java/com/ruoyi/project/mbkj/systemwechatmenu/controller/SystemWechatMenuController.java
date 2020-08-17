@@ -12,6 +12,7 @@ import com.ruoyi.framework.web.domain.Ztree;
 import com.ruoyi.project.mbkj.systemwechatmenu.domain.SystemWechatMenu;
 import com.ruoyi.project.mbkj.systemwechatmenu.domain.TreeNode;
 import com.ruoyi.project.mbkj.systemwechatmenu.service.ISystemWechatMenuService;
+import com.ruoyi.project.system.role.domain.Role;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +43,14 @@ public class SystemWechatMenuController extends BaseController
     public String systemwechatmenu()
     {
         return prefix + "/systemwechatmenu";
+    }
+
+    @GetMapping("/roleMenuTreeData")
+    @ResponseBody
+    public List<Ztree> roleMenuTreeData(Role role)
+    {
+        List<Ztree> ztrees = systemWechatMenuService.roleMenuTreeData(role);
+        return ztrees;
     }
 
     /**

@@ -1,11 +1,13 @@
 package com.ruoyi.project.mbkj.systemwechatmenu.service.impl;
 
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.text.Convert;
 import com.ruoyi.framework.web.domain.Ztree;
 import com.ruoyi.project.mbkj.systemwechatmenu.domain.SystemWechatMenu;
 import com.ruoyi.project.mbkj.systemwechatmenu.domain.TreeNode;
 import com.ruoyi.project.mbkj.systemwechatmenu.mapper.SystemWechatMenuMapper;
 import com.ruoyi.project.mbkj.systemwechatmenu.service.ISystemWechatMenuService;
+import com.ruoyi.project.system.role.domain.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -132,4 +134,66 @@ public class SystemWechatMenuServiceImpl implements ISystemWechatMenuService
         }
         return list;
     }
+
+    @Override
+    public List<Ztree> roleMenuTreeData(Role role) {
+
+        Long roleId = role.getRoleId();
+        List<Ztree> ztrees = new ArrayList<Ztree>();
+        List<SystemWechatMenu> menuList = selectWechatMenuAll(role.getRoleId());
+        if (StringUtils.isNotNull(roleId))
+        {
+            List<String> roleMenuList = systemWechatMenuMapper.selectWechatMenuTree(roleId);
+            ztrees = initZtree(menuList, roleMenuList, true);
+        }
+        else
+        {
+            ztrees = initZtree(menuList, null, true);
+        }
+        return ztrees;
+    }
+
+    public List<Ztree> initZtree(List<SystemWechatMenu> menuList, List<String> roleMenuList, boolean permsFlag)
+    {
+        List<Ztree> ztrees = new ArrayList<Ztree>();
+        boolean isCheck = StringUtils.isNotNull(roleMenuList);
+        for (SystemWechatMenu menu : menuList)
+        {
+            Ztree ztree = new Ztree();
+            ztree.setId(menu.getId());
+            ztree.setpId(menu.getParentid());
+            ztree.setName(menu.getBtnname());
+            ztree.setTitle(menu.getBtnname());
+            if (isCheck)
+            {
+                ztree.setChecked(roleMenuList.contains(String.valueOf(menu.getId())));
+            }
+            ztrees.add(ztree);
+        }
+        return ztrees;
+    }
+
+    public static void main(String[] args) {
+        List<String> list=new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        System.out.println(list.contains("1"));
+    }
+
+    public List<SystemWechatMenu> selectWechatMenuAll(Long id)
+    {
+        SystemWechatMenu wechatMenu=new SystemWechatMenu();
+        List<SystemWechatMenu> menuList = null;
+//        if (null==id)
+//        {
+            menuList = systemWechatMenuMapper.selectSystemWechatMenuListZtrees(wechatMenu);
+//        }
+//        else
+//        {
+//////            menuList = menuMapper.selectMenuAllByUserId(user.getUserId());
+//            menuList = systemWechatMenuMapper.selectMenuAllByUserId(id);
+//        }
+        return menuList;
+    }
+
 }

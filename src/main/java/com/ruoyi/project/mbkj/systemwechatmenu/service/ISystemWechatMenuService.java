@@ -3,6 +3,7 @@ package com.ruoyi.project.mbkj.systemwechatmenu.service;
 import com.ruoyi.framework.web.domain.Ztree;
 import com.ruoyi.project.mbkj.systemwechatmenu.domain.SystemWechatMenu;
 import com.ruoyi.project.mbkj.systemwechatmenu.domain.TreeNode;
+import com.ruoyi.project.system.role.domain.Role;
 
 import java.util.List;
 
@@ -70,4 +71,6 @@ public interface ISystemWechatMenuService
     public List<Ztree> selectSystemWechatMenuTree();
 
     List<TreeNode> selectTree();
+
+    List<Ztree> roleMenuTreeData(Role role);
 }
