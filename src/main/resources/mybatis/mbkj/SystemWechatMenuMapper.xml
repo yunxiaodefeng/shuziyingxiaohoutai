@@ -17,14 +17,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sortid"    column="sortid"    />
         <result property="pathurl"    column="pathurl"    />
         <result property="parentName" column="parent_name" />
+        <result property="remark" column="remark" />
     </resultMap>
 
     <sql id="selectSystemWechatMenuVo">
-        select id, icon, btnname, paytime, endtime, parentid, ispay, isshow, iscreate, sortid, pathurl,roletype from system_wechat_menu
+        select id, icon, btnname, paytime, endtime, parentid, ispay, isshow, iscreate, sortid, pathurl,roletype,remark from system_wechat_menu
     </sql>
 
     <select id="selectTree" parameterType="map" resultType="com.ruoyi.project.mbkj.systemwechatmenu.domain.TreeNode">
-        SELECT id, icon, btnname,parentid,iscreate,pathurl,ispay,roletype  FROM system_wechat_menu WHERE roletype=5 and   parentid=#{id}
+        SELECT id, icon, btnname,parentid,iscreate,pathurl,ispay,roletype,remark  FROM system_wechat_menu WHERE roletype=5 and   parentid=#{id}
         ORDER BY sortid
     </select>
 
@@ -37,14 +38,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectMenuAllByUserId" parameterType="long" resultMap="SystemWechatMenuResult">
-       SELECT a.id, icon,CONCAT(b.`value`,'_',btnname) AS btnname, paytime, endtime, parentid, ispay, isshow, iscreate, sortid, pathurl,roletype
+       SELECT a.id, icon,CONCAT(IFNULL(remark,"权限"),'_',CONCAT(b.`value`,'_',btnname)) AS btnname, paytime, endtime, parentid, ispay, isshow, iscreate, sortid, pathurl,roletype
 FROM system_wechat_menu a LEFT JOIN  system_dic b ON a.roletype=b.`key`
 LEFT JOIN system_wechat_role_menu c ON a.`id`=c.menuid WHERE  b.`type`='roletype' AND  c.roleid=#{id}
     </select>
 
     <select id="selectSystemWechatMenuListZtrees" parameterType="SystemWechatMenu" resultMap="SystemWechatMenuResult">
-        SELECT a.id, icon,CONCAT(b.`value`,'_',btnname) AS btnname, paytime, endtime, parentid, ispay, isshow, iscreate, sortid, pathurl,roletype
-        FROM system_wechat_menu a LEFT JOIN  system_dic b ON a.roletype=b.`key` WHERE b.`type`='roletype'
+            SELECT a.id, icon,CONCAT(IFNULL(remark,"权限"),'_',CONCAT(b.`value`,'_',btnname)) AS btnname, paytime, endtime, parentid, ispay, isshow, iscreate, sortid, pathurl,roletype
+            FROM system_wechat_menu a LEFT JOIN  system_dic b ON a.roletype=b.`key` WHERE b.`type`='roletype'
         <where>
             <if test="icon != null  and icon != ''"> and icon = #{icon}</if>
             <if test="btnname != null  and btnname != ''"> and btnname like concat('%', #{btnname}, '%')</if>
@@ -58,7 +59,7 @@ LEFT JOIN system_wechat_role_menu c ON a.`id`=c.menuid WHERE  b.`type`='roletype
             <if test="pathurl != null  and pathurl != ''"> and pathurl = #{pathurl}</if>
             <if test="roletype != null "> and roletype = #{roletype}</if>
         </where>
-        order by    a.`id`
+        ORDER BY  a.`parentid`,a.`sortid`
     </select>
 
     <select id="selectSystemWechatMenuList" parameterType="SystemWechatMenu" resultMap="SystemWechatMenuResult">
@@ -81,6 +82,7 @@ LEFT JOIN system_wechat_role_menu c ON a.`id`=c.menuid WHERE  b.`type`='roletype
     
     <select id="selectSystemWechatMenuById" parameterType="Long" resultMap="SystemWechatMenuResult">
         select t.id, t.icon, t.btnname, t.paytime, t.endtime, t.parentid, t.ispay, t.isshow, t.iscreate, t.sortid, t.pathurl, p.btnname as parent_name
+        ,t.roletype,t.remark
         from system_wechat_menu t
         left join system_wechat_menu p on p.id = t.parentid
         where t.id = #{id}
@@ -93,6 +95,7 @@ LEFT JOIN system_wechat_role_menu c ON a.`id`=c.menuid WHERE  b.`type`='roletype
             <if test="btnname != null and btnname != ''">btnname,</if>
             <if test="paytime != null and paytime != ''">paytime,</if>
             <if test="endtime != null and endtime != ''">endtime,</if>
+            <if test="remark != null and remark != ''">remark,</if>
             <if test="parentid != null">parentid,</if>
             <if test="ispay != null">ispay,</if>
             <if test="isshow != null">isshow,</if>
@@ -106,6 +109,7 @@ LEFT JOIN system_wechat_role_menu c ON a.`id`=c.menuid WHERE  b.`type`='roletype
             <if test="btnname != null and btnname != ''">#{btnname},</if>
             <if test="paytime != null and paytime != ''">#{paytime},</if>
             <if test="endtime != null and endtime != ''">#{endtime},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
             <if test="parentid != null">#{parentid},</if>
             <if test="ispay != null">#{ispay},</if>
             <if test="isshow != null">#{isshow},</if>
@@ -123,6 +127,7 @@ LEFT JOIN system_wechat_role_menu c ON a.`id`=c.menuid WHERE  b.`type`='roletype
             <if test="btnname != null and btnname != ''">btnname = #{btnname},</if>
             <if test="paytime != null and paytime != ''">paytime = #{paytime},</if>
             <if test="endtime != null and endtime != ''">endtime = #{endtime},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
             <if test="parentid != null">parentid = #{parentid},</if>
             <if test="ispay != null">ispay = #{ispay},</if>
             <if test="isshow != null">isshow = #{isshow},</if>

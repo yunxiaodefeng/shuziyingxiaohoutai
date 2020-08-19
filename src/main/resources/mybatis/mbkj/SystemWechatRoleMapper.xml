@@ -11,10 +11,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sort"    column="sort"    />
         <result property="isshow"    column="isshow"    />
         <result property="parentName" column="parent_name" />
+        <result property="valuas" column="valuas" />
     </resultMap>
 
     <sql id="selectSystemWechatRoleVo">
-        select id, name, parentid, sort, isshow from system_wechat_role
+        select id, name, parentid, sort, isshow,valuas from system_wechat_role
     </sql>
 
     <select id="selectSystemWechatRoleList" parameterType="SystemWechatRole" resultMap="SystemWechatRoleResult">
@@ -24,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="parentid != null "> and parentid = #{parentid}</if>
             <if test="sort != null "> and sort = #{sort}</if>
             <if test="isshow != null "> and isshow = #{isshow}</if>
+            <if test="valuas != null and valuas!='' "> and valuas = #{valuas}</if>
         </where>
         order by parentid
     </select>
@@ -42,12 +44,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="parentid != null">parentid,</if>
             <if test="sort != null">sort,</if>
             <if test="isshow != null">isshow,</if>
+            <if test="valuas != null and valuas!='' ">valuas,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null">#{name},</if>
             <if test="parentid != null">#{parentid},</if>
             <if test="sort != null">#{sort},</if>
             <if test="isshow != null">#{isshow},</if>
+            <if test="valuas != null and valuas!=''  ">#{valuas},</if>
          </trim>
     </insert>
 
@@ -60,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="parentid != null">parentid = #{parentid},</if>
             <if test="sort != null">sort = #{sort},</if>
             <if test="isshow != null">isshow = #{isshow},</if>
+            <if test="  valuas!= null and valuas!='' ">  valuas= #{valuas} ,</if>
         </trim>
         where id = #{id}
     </update>

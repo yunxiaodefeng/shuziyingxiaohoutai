@@ -270,12 +270,20 @@ public class StUsermonthtargetController extends BaseController
     		String result = "";
     		
         	result = result +targetResult.getStoreName()+ ",";
-        	result = result +new BigDecimal(targetResult.getGongxian()).stripTrailingZeros().toPlainString() + ",";
-        	result = result +new BigDecimal(targetResult.getLuruxinxi()).stripTrailingZeros().toPlainString()+ ",";
-        	result = result +new BigDecimal(targetResult.getWanshanxinxi()).stripTrailingZeros().toPlainString()+",";
-        	result = result +new BigDecimal(targetResult.getWeihuxixni()).stripTrailingZeros().toPlainString() + ",";
-        	result = result +new BigDecimal(targetResult.getGenjinkehu()).stripTrailingZeros().toPlainString()+ ",";
-        	
+			result = result +new BigDecimal(targetResult.getGongxian()).stripTrailingZeros().toPlainString() + ",";
+			if(StringUtils.isNotEmpty(status) && !status.equals("-1") && status.equals("0")){
+				result = result +new BigDecimal(0).stripTrailingZeros().toPlainString()+ ",";
+				result = result +new BigDecimal(0).stripTrailingZeros().toPlainString()+",";
+				result = result +new BigDecimal(0).stripTrailingZeros().toPlainString() + ",";
+				result = result +new BigDecimal(0).stripTrailingZeros().toPlainString()+ ",";
+			}else {
+
+				result = result +new BigDecimal(targetResult.getLuruxinxi()).stripTrailingZeros().toPlainString()+ ",";
+				result = result +new BigDecimal(targetResult.getWanshanxinxi()).stripTrailingZeros().toPlainString()+",";
+				result = result +new BigDecimal(targetResult.getWeihuxixni()).stripTrailingZeros().toPlainString() + ",";
+				result = result +new BigDecimal(targetResult.getGenjinkehu()).stripTrailingZeros().toPlainString()+ ",";
+			}
+
         	List<OtherTargetResult>  otherTargetResultList = stUsermonthtargetService.selectUserOthertarget(selectTargetParam);
         	
         	for (OtherTargetResult otherTargetResult : otherTargetResultList) {
@@ -474,12 +482,20 @@ public class StUsermonthtargetController extends BaseController
     		result = result +"<tr>";
         	
         	result = result +"<td >"+targetResult.getStoreName()+ "</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getGongxian()).stripTrailingZeros().toPlainString() + "</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getLuruxinxi()).stripTrailingZeros().toPlainString()+ "</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWanshanxinxi()).stripTrailingZeros().toPlainString()+"</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWeihuxixni()).stripTrailingZeros().toPlainString() + "</td>";
-        	result = result +"<td style='text-align:center' >"+new BigDecimal(targetResult.getGenjinkehu()).stripTrailingZeros().toPlainString()+ "</td>";
-        	
+			result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getGongxian()).stripTrailingZeros().toPlainString() + "</td>";
+			if(StringUtils.isNotEmpty(status)&& !status.equals("-1") && status.equals("0")){
+				result = result +"<td style='text-align:center'>"+new BigDecimal(0).stripTrailingZeros().toPlainString()+ "</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(0).stripTrailingZeros().toPlainString()+"</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(0).stripTrailingZeros().toPlainString() + "</td>";
+				result = result +"<td style='text-align:center' >"+new BigDecimal(0).stripTrailingZeros().toPlainString()+ "</td>";
+			}else {
+				result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getLuruxinxi()).stripTrailingZeros().toPlainString()+ "</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWanshanxinxi()).stripTrailingZeros().toPlainString()+"</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWeihuxixni()).stripTrailingZeros().toPlainString() + "</td>";
+				result = result +"<td style='text-align:center' >"+new BigDecimal(targetResult.getGenjinkehu()).stripTrailingZeros().toPlainString()+ "</td>";
+
+			}
+
         	List<OtherTargetResult>  otherTargetResultList = stUsermonthtargetService.selectOthertarget(selectTargetParam);
         	
         	for (OtherTargetResult otherTargetResult : otherTargetResultList) {
@@ -532,12 +548,20 @@ public class StUsermonthtargetController extends BaseController
     		result = result +"<tr>";
         	
         	result = result +"<td >"+targetResult.getStoreName()+ "</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getGongxian()).stripTrailingZeros().toPlainString() + "</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getLuruxinxi()).stripTrailingZeros().toPlainString()+ "</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWanshanxinxi()).stripTrailingZeros().toPlainString()+"</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWeihuxixni()).stripTrailingZeros().toPlainString() + "</td>";
-        	result = result +"<td style='text-align:center' >"+new BigDecimal(targetResult.getGenjinkehu()).stripTrailingZeros().toPlainString()+ "</td>";
-        	
+			result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getGongxian()).stripTrailingZeros().toPlainString() + "</td>";
+			if(StringUtils.isNotEmpty(status)&& !status.equals("-1") && status.equals("0")){
+				result = result +"<td style='text-align:center'>"+new BigDecimal(0).stripTrailingZeros().toPlainString()+ "</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(0).stripTrailingZeros().toPlainString()+"</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(0).stripTrailingZeros().toPlainString() + "</td>";
+				result = result +"<td style='text-align:center' >"+new BigDecimal(0).stripTrailingZeros().toPlainString()+ "</td>";
+			}else {
+
+				result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getLuruxinxi()).stripTrailingZeros().toPlainString()+ "</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWanshanxinxi()).stripTrailingZeros().toPlainString()+"</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWeihuxixni()).stripTrailingZeros().toPlainString() + "</td>";
+				result = result +"<td style='text-align:center' >"+new BigDecimal(targetResult.getGenjinkehu()).stripTrailingZeros().toPlainString()+ "</td>";
+
+			}
         	List<OtherTargetResult>  otherTargetResultList = stUsermonthtargetService.selectUserOthertarget(selectTargetParam);
         	
         	for (OtherTargetResult otherTargetResult : otherTargetResultList) {

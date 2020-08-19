@@ -25,7 +25,7 @@
 
 
     <select id="selectStUsermonthtargetList" parameterType="StUsermonthtarget"
-            resultMap="StUsermonthtargetResult"> 
+            resultMap="StUsermonthtargetResult">
         <include refid="selectStUsermonthtargetVo" />
 
         <where>
@@ -154,6 +154,7 @@
         <where>
             assettype=1
             and sotreid = #{storeid}
+            <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
 
         ) sug
@@ -171,6 +172,7 @@
             00:00:00'))
             and (select date_format(
             #{endTime},'%Y-%m-%d 23:59:59'))
+
         </where>
 
         GROUP by t.name
@@ -318,6 +320,7 @@
         <where>
             assettype=1
             and userid = #{storeid}
+            <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
 
         ) sug

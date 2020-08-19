@@ -123,13 +123,15 @@ public class SystemWechatMenuServiceImpl implements ISystemWechatMenuService
     }
 
     @Override
-    public List<TreeNode> selectTree() {
+    public List<TreeNode> selectTree(Long role) {
         Map<String,Object> map=new HashMap();
         map.put("id",0);
+        map.put("role",role);
         List<TreeNode> list=systemWechatMenuMapper.selectTree(map);
         for (TreeNode treeNode : list) {
             Map<String,Object> map1=new HashMap();
             map1.put("id",treeNode.getId());
+            map1.put("role",role);
             treeNode.setChildren(systemWechatMenuMapper.selectTree(map1));
         }
         return list;

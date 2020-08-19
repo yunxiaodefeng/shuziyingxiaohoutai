@@ -32,6 +32,15 @@ public class SystemWechatRole extends TreeEntity
 
     private Long parentid;
     private String ztrees;
+    private String valuas;
+
+    public String getValuas() {
+        return valuas;
+    }
+
+    public void setValuas(String valuas) {
+        this.valuas = valuas;
+    }
 
     public String getZtrees() {
         return ztrees;

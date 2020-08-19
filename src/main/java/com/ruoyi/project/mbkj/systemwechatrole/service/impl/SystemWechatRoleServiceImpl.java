@@ -1,7 +1,11 @@
 package com.ruoyi.project.mbkj.systemwechatrole.service.impl;
 
+import com.ruoyi.common.utils.JsonUtils;
+import com.ruoyi.common.utils.RedisUtils;
 import com.ruoyi.common.utils.text.Convert;
 import com.ruoyi.framework.web.domain.Ztree;
+import com.ruoyi.project.mbkj.systemwechatmenu.domain.TreeNode;
+import com.ruoyi.project.mbkj.systemwechatmenu.service.ISystemWechatMenuService;
 import com.ruoyi.project.mbkj.systemwechatrole.domain.SystemWechatRole;
 import com.ruoyi.project.mbkj.systemwechatrole.mapper.SystemWechatRoleMapper;
 import com.ruoyi.project.mbkj.systemwechatrole.service.ISystemWechatRoleService;
@@ -10,6 +14,7 @@ import com.ruoyi.project.mbkj.systemwechatrolemenu.mapper.SystemWechatRoleMenuMa
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +28,13 @@ import java.util.List;
 public class SystemWechatRoleServiceImpl implements ISystemWechatRoleService 
 {
     @Autowired
+    private ISystemWechatMenuService systemWechatMenuService;
+    @Autowired
     private SystemWechatRoleMapper systemWechatRoleMapper;
     @Autowired
     private SystemWechatRoleMenuMapper systemWechatRoleMenuMapper;
+    @Autowired
+    private RedisUtils redisService;
     /**
      * 查询小程序角色
      * 
@@ -77,9 +86,23 @@ public class SystemWechatRoleServiceImpl implements ISystemWechatRoleService
         int i = systemWechatRoleMapper.updateSystemWechatRole(systemWechatRole);
         systemWechatRoleMenuMapper.deleteSystemWechatRoleMenuByRoleId(systemWechatRole.getId());
         addRoleMenu(systemWechatRole, i);
+        Long id = systemWechatRole.getId();
+        updateRedisTree(i,id);
         return i;
     }
-
+    private void updateRedisTree(int i,Long role) {
+        if (i >= 1) {
+            if (redisService.hasKey("treeNode")) {
+                redisService.del("treeNode");
+            }
+            List<TreeNode> list = systemWechatMenuService.selectTree(role);
+            try {
+                redisService.set("treeNode", JsonUtils.object2Json(list));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     private void addRoleMenu(SystemWechatRole systemWechatRole, int i) {
         if(i>0){
             String[] split = systemWechatRole.getZtrees().split(",");

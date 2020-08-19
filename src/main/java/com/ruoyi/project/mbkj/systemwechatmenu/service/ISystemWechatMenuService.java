@@ -70,7 +70,7 @@ public interface ISystemWechatMenuService
      */
     public List<Ztree> selectSystemWechatMenuTree();
 
-    List<TreeNode> selectTree();
+    List<TreeNode> selectTree(Long role);
 
     List<Ztree> roleMenuTreeData(Role role);
 }

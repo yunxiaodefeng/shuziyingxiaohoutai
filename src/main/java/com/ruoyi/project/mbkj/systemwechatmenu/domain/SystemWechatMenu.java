@@ -60,6 +60,18 @@ public class SystemWechatMenu extends TreeEntity
 
     private Long[] ztrees;
 
+    private String remark;
+
+    @Override
+    public String getRemark() {
+        return remark;
+    }
+
+    @Override
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public Long[] getZtrees() {
         return ztrees;
     }
