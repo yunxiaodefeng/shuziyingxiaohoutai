@@ -25,7 +25,7 @@
 
 
     <select id="selectStUsermonthtargetList" parameterType="StUsermonthtarget"
-            resultMap="StUsermonthtargetResult"> 
+            resultMap="StUsermonthtargetResult">
         <include refid="selectStUsermonthtargetVo" />
 
         <where>
@@ -66,7 +66,7 @@
             #{startTime},'%Y-%m-%d
             00:00:00')) and (select date_format(
             #{endTime},'%Y-%m-%d 23:59:59'))
-
+            <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
         ) su
         LEFT JOIN st_user_task ss ON su.storestid = ss.stid and
@@ -154,6 +154,7 @@
         <where>
             assettype=1
             and sotreid = #{storeid}
+            <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
 
         ) sug
@@ -171,6 +172,7 @@
             00:00:00'))
             and (select date_format(
             #{endTime},'%Y-%m-%d 23:59:59'))
+
         </where>
 
         GROUP by t.name
@@ -217,6 +219,7 @@
             and (select date_format(
             #{endTime},'%Y-%m-%d 23:59:59'))
             and  userid =#{storeid}
+            <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
 
         ) su
@@ -317,6 +320,7 @@
         <where>
             assettype=1
             and userid = #{storeid}
+            <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
 
         ) sug

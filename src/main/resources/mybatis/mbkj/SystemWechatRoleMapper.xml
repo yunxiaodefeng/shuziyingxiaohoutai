@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mbkj.systemwechatrole.mapper.SystemWechatRoleMapper">
+    
+    <resultMap type="SystemWechatRole" id="SystemWechatRoleResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="parentid"    column="parentid"    />
+        <result property="sort"    column="sort"    />
+        <result property="isshow"    column="isshow"    />
+        <result property="parentName" column="parent_name" />
+        <result property="valuas" column="valuas" />
+    </resultMap>
+
+    <sql id="selectSystemWechatRoleVo">
+        select id, name, parentid, sort, isshow,valuas from system_wechat_role
+    </sql>
+
+    <select id="selectSystemWechatRoleList" parameterType="SystemWechatRole" resultMap="SystemWechatRoleResult">
+        <include refid="selectSystemWechatRoleVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="parentid != null "> and parentid = #{parentid}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="isshow != null "> and isshow = #{isshow}</if>
+            <if test="valuas != null and valuas!='' "> and valuas = #{valuas}</if>
+        </where>
+        order by parentid
+    </select>
+    
+    <select id="selectSystemWechatRoleById" parameterType="Long" resultMap="SystemWechatRoleResult">
+        select t.id, t.name, t.parentid, t.sort, t.isshow, p.name as parent_name
+        from system_wechat_role t
+        left join system_wechat_role p on p.id = t.parentid
+        where t.id = #{id}
+    </select>
+        
+    <insert id="insertSystemWechatRole" parameterType="SystemWechatRole" useGeneratedKeys="true" keyProperty="id">
+        insert into system_wechat_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="parentid != null">parentid,</if>
+            <if test="sort != null">sort,</if>
+            <if test="isshow != null">isshow,</if>
+            <if test="valuas != null and valuas!='' ">valuas,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="parentid != null">#{parentid},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="isshow != null">#{isshow},</if>
+            <if test="valuas != null and valuas!=''  ">#{valuas},</if>
+         </trim>
+    </insert>
+
+
+
+    <update id="updateSystemWechatRole" parameterType="SystemWechatRole">
+        update system_wechat_role
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="parentid != null">parentid = #{parentid},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="isshow != null">isshow = #{isshow},</if>
+            <if test="  valuas!= null and valuas!='' ">  valuas= #{valuas} ,</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSystemWechatRoleById" parameterType="Long">
+        delete from system_wechat_role where id = #{id}
+    </delete>
+
+    <delete id="deleteSystemWechatRoleByIds" parameterType="String">
+        delete from system_wechat_role where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,41 +1,7 @@
 package com.ruoyi.project.mbkj.usermonthtarget.controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRichTextString;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.framework.config.RuoYiConfig;
@@ -52,6 +18,27 @@ import com.ruoyi.project.mbkj.usermonthtarget.service.IStUsermonthtargetService;
 import com.ruoyi.project.ro.SelectTargetParam;
 import com.ruoyi.project.vo.OtherTargetResult;
 import com.ruoyi.project.vo.TargetResult;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -100,8 +87,10 @@ public class StUsermonthtargetController extends BaseController
      */
     @RequiresPermissions("mbkj:usermonthtarget:export")
     @Log(title = "数据统计", businessType = BusinessType.EXPORT)
-    @GetMapping("/export1/{startTime1}/{endTime1}")
-    public void  export(@PathVariable("startTime1") String startTime1,@PathVariable("endTime1") String endTime1, HttpServletRequest request,HttpServletResponse response)
+    @GetMapping("/export1/{startTime1}/{endTime1}/{status}")
+    public void  export(@PathVariable("startTime1") String startTime1,@PathVariable("endTime1") String endTime1
+			,@PathVariable("status") String status,
+						HttpServletRequest request,HttpServletResponse response)
     {
     	
     	 
@@ -132,13 +121,15 @@ public class StUsermonthtargetController extends BaseController
     	
     	SystemStore systemStore1 = new SystemStore();
     	systemStore1.setStatus("1");
-    	
+
     	 List<SystemStore> list = systemStoreService.selectSystemStoreList(systemStore1);
     	
     	for (SystemStore systemStore : list) {
     		
     		selectTargetParam.setStoreid(systemStore.getId()+"");
-    		
+    		if(StringUtils.isNotEmpty(status)&& !status.equals("-1")){
+				selectTargetParam.setStatus(status);
+			}
     		TargetResult targetResult = stUsermonthtargetService.select5target(selectTargetParam);
     		
     		String result = "";
@@ -229,8 +220,10 @@ public class StUsermonthtargetController extends BaseController
      */
     @RequiresPermissions("mbkj:usermonthtarget:export")
     @Log(title = "数据统计", businessType = BusinessType.EXPORT)
-    @GetMapping("/export2/{startTime1}/{endTime1}/{storeid}")
-    public void  export2(@PathVariable("startTime1") String startTime1,@PathVariable("endTime1") String endTime1,@PathVariable("storeid") String storeId, HttpServletRequest request,HttpServletResponse response)
+    @GetMapping("/export2/{startTime1}/{endTime1}/{storeid}/{status}")
+    public void  export2(@PathVariable("startTime1") String startTime1,@PathVariable("endTime1") String endTime1,@PathVariable("storeid") String storeId,
+						 @PathVariable("status") String status,HttpServletRequest request,HttpServletResponse response)
+
     {
     	
     	 
@@ -269,18 +262,28 @@ public class StUsermonthtargetController extends BaseController
     	for (SysUserAdmin sysUserAdmin : list) {
     		
     		selectTargetParam.setStoreid(sysUserAdmin.getId()+"");
-    		
+			if(StringUtils.isNotEmpty(status) && !status.equals("-1")){
+				selectTargetParam.setStatus(status);
+			}
     		TargetResult targetResult = stUsermonthtargetService.selectUser5target(selectTargetParam);
     		
     		String result = "";
     		
         	result = result +targetResult.getStoreName()+ ",";
-        	result = result +new BigDecimal(targetResult.getGongxian()).stripTrailingZeros().toPlainString() + ",";
-        	result = result +new BigDecimal(targetResult.getLuruxinxi()).stripTrailingZeros().toPlainString()+ ",";
-        	result = result +new BigDecimal(targetResult.getWanshanxinxi()).stripTrailingZeros().toPlainString()+",";
-        	result = result +new BigDecimal(targetResult.getWeihuxixni()).stripTrailingZeros().toPlainString() + ",";
-        	result = result +new BigDecimal(targetResult.getGenjinkehu()).stripTrailingZeros().toPlainString()+ ",";
-        	
+			result = result +new BigDecimal(targetResult.getGongxian()).stripTrailingZeros().toPlainString() + ",";
+			if(StringUtils.isNotEmpty(status) && !status.equals("-1") && status.equals("0")){
+				result = result +new BigDecimal(0).stripTrailingZeros().toPlainString()+ ",";
+				result = result +new BigDecimal(0).stripTrailingZeros().toPlainString()+",";
+				result = result +new BigDecimal(0).stripTrailingZeros().toPlainString() + ",";
+				result = result +new BigDecimal(0).stripTrailingZeros().toPlainString()+ ",";
+			}else {
+
+				result = result +new BigDecimal(targetResult.getLuruxinxi()).stripTrailingZeros().toPlainString()+ ",";
+				result = result +new BigDecimal(targetResult.getWanshanxinxi()).stripTrailingZeros().toPlainString()+",";
+				result = result +new BigDecimal(targetResult.getWeihuxixni()).stripTrailingZeros().toPlainString() + ",";
+				result = result +new BigDecimal(targetResult.getGenjinkehu()).stripTrailingZeros().toPlainString()+ ",";
+			}
+
         	List<OtherTargetResult>  otherTargetResultList = stUsermonthtargetService.selectUserOthertarget(selectTargetParam);
         	
         	for (OtherTargetResult otherTargetResult : otherTargetResultList) {
@@ -448,7 +451,8 @@ public class StUsermonthtargetController extends BaseController
     	
     	String startTime = request.getParameter("startTime");
     	String endTime = request.getParameter("endTime");
-    	
+    	String status = request.getParameter("status");
+
     	
     	SelectTargetParam selectTargetParam = new SelectTargetParam();
     	
@@ -470,18 +474,28 @@ public class StUsermonthtargetController extends BaseController
     	
     	for (SystemStore systemStore : list) {
     		selectTargetParam.setStoreid(systemStore.getId()+"");
-    		
+			if(StringUtils.isNotEmpty(status)&& !status.equals("-1")){
+				selectTargetParam.setStatus(status);
+			}
     		TargetResult targetResult = stUsermonthtargetService.select5target(selectTargetParam);
     		
     		result = result +"<tr>";
         	
         	result = result +"<td >"+targetResult.getStoreName()+ "</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getGongxian()).stripTrailingZeros().toPlainString() + "</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getLuruxinxi()).stripTrailingZeros().toPlainString()+ "</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWanshanxinxi()).stripTrailingZeros().toPlainString()+"</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWeihuxixni()).stripTrailingZeros().toPlainString() + "</td>";
-        	result = result +"<td style='text-align:center' >"+new BigDecimal(targetResult.getGenjinkehu()).stripTrailingZeros().toPlainString()+ "</td>";
-        	
+			result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getGongxian()).stripTrailingZeros().toPlainString() + "</td>";
+			if(StringUtils.isNotEmpty(status)&& !status.equals("-1") && status.equals("0")){
+				result = result +"<td style='text-align:center'>"+new BigDecimal(0).stripTrailingZeros().toPlainString()+ "</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(0).stripTrailingZeros().toPlainString()+"</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(0).stripTrailingZeros().toPlainString() + "</td>";
+				result = result +"<td style='text-align:center' >"+new BigDecimal(0).stripTrailingZeros().toPlainString()+ "</td>";
+			}else {
+				result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getLuruxinxi()).stripTrailingZeros().toPlainString()+ "</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWanshanxinxi()).stripTrailingZeros().toPlainString()+"</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWeihuxixni()).stripTrailingZeros().toPlainString() + "</td>";
+				result = result +"<td style='text-align:center' >"+new BigDecimal(targetResult.getGenjinkehu()).stripTrailingZeros().toPlainString()+ "</td>";
+
+			}
+
         	List<OtherTargetResult>  otherTargetResultList = stUsermonthtargetService.selectOthertarget(selectTargetParam);
         	
         	for (OtherTargetResult otherTargetResult : otherTargetResultList) {
@@ -503,7 +517,7 @@ public class StUsermonthtargetController extends BaseController
     	
     	String startTime = request.getParameter("startTime");
     	String endTime = request.getParameter("endTime");
-    	
+		String status = request.getParameter("status");
     	String storeId = request.getParameter("storeId");
     	
     	SelectTargetParam selectTargetParam = new SelectTargetParam();
@@ -526,18 +540,28 @@ public class StUsermonthtargetController extends BaseController
     	
     	for (SysUserAdmin sysUserAdmin : list) {
     		selectTargetParam.setStoreid(sysUserAdmin.getId()+"");
-    		
+			if(StringUtils.isNotEmpty(status) && !status.equals("-1")){
+				selectTargetParam.setStatus(status);
+			}
     		TargetResult targetResult = stUsermonthtargetService.selectUser5target(selectTargetParam);
     		
     		result = result +"<tr>";
         	
         	result = result +"<td >"+targetResult.getStoreName()+ "</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getGongxian()).stripTrailingZeros().toPlainString() + "</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getLuruxinxi()).stripTrailingZeros().toPlainString()+ "</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWanshanxinxi()).stripTrailingZeros().toPlainString()+"</td>";
-        	result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWeihuxixni()).stripTrailingZeros().toPlainString() + "</td>";
-        	result = result +"<td style='text-align:center' >"+new BigDecimal(targetResult.getGenjinkehu()).stripTrailingZeros().toPlainString()+ "</td>";
-        	
+			result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getGongxian()).stripTrailingZeros().toPlainString() + "</td>";
+			if(StringUtils.isNotEmpty(status)&& !status.equals("-1") && status.equals("0")){
+				result = result +"<td style='text-align:center'>"+new BigDecimal(0).stripTrailingZeros().toPlainString()+ "</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(0).stripTrailingZeros().toPlainString()+"</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(0).stripTrailingZeros().toPlainString() + "</td>";
+				result = result +"<td style='text-align:center' >"+new BigDecimal(0).stripTrailingZeros().toPlainString()+ "</td>";
+			}else {
+
+				result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getLuruxinxi()).stripTrailingZeros().toPlainString()+ "</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWanshanxinxi()).stripTrailingZeros().toPlainString()+"</td>";
+				result = result +"<td style='text-align:center'>"+new BigDecimal(targetResult.getWeihuxixni()).stripTrailingZeros().toPlainString() + "</td>";
+				result = result +"<td style='text-align:center' >"+new BigDecimal(targetResult.getGenjinkehu()).stripTrailingZeros().toPlainString()+ "</td>";
+
+			}
         	List<OtherTargetResult>  otherTargetResultList = stUsermonthtargetService.selectUserOthertarget(selectTargetParam);
         	
         	for (OtherTargetResult otherTargetResult : otherTargetResultList) {

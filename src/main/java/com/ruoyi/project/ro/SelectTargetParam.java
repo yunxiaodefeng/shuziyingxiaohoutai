@@ -7,6 +7,16 @@ public class SelectTargetParam {
 	private Date startTime;
 	private Date endTime;
 	private String storeid;
+	private  String status;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public Date getStartTime() {
 		return startTime;
 	}
