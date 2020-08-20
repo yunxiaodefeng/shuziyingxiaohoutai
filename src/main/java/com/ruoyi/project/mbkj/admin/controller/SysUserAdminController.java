@@ -1,5 +1,6 @@
 package com.ruoyi.project.mbkj.admin.controller;
 
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
@@ -8,12 +9,15 @@ import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.framework.web.page.TableDataInfo;
 import com.ruoyi.project.mbkj.admin.domain.SysUserAdmin;
 import com.ruoyi.project.mbkj.admin.service.ISysUserAdminService;
+import com.ruoyi.project.mbkj.store.domain.SystemStore;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,8 +50,46 @@ private ISysUserAdminService sysUserAdminService;
     @ResponseBody
     public TableDataInfo list(SysUserAdmin sysUserAdmin)
     {
-        startPage();
-        List<SysUserAdmin> list = sysUserAdminService.selectSysUserAdminList(sysUserAdmin);
+       
+        
+        String userId = sysUserAdmin.getUserId();
+        String parentId = sysUserAdmin.getParentId();
+        
+        List<SysUserAdmin> list = new ArrayList<SysUserAdmin>();
+        
+        //  查询市级--员工信息
+        if(parentId.equals("")){
+        	List<SystemStore> systemStoreList =  sysUserAdminService.selectStoreByParentId(userId);
+        	if(systemStoreList.size() > 0){
+        		for (SystemStore systemStore : systemStoreList) {
+        			List<SystemStore> systemStoreList2 =  sysUserAdminService.selectStoreByParentId(systemStore.getId().toString());
+    				for (SystemStore systemStore2 : systemStoreList2) {
+    					sysUserAdmin.setStoreid(systemStore2.getId().toString());
+						List<SysUserAdmin> tempList =  sysUserAdminService.selectSysUserAdminList(sysUserAdmin);
+						list.addAll(tempList);
+					}
+        		}
+        	}
+        }
+        //  查询区县级  或  网点 -- 员工信息
+        if(!parentId.equals("")){
+        	List<SystemStore> systemStoreList =  sysUserAdminService.selectStoreByParentId(userId);
+        	if(systemStoreList.size() > 0){
+        		for (SystemStore systemStore2 : systemStoreList) {
+					sysUserAdmin.setStoreid(systemStore2.getId().toString());
+					List<SysUserAdmin> tempList =  sysUserAdminService.selectSysUserAdminList(sysUserAdmin);
+					list.addAll(tempList);
+				}
+        	}else{
+        		sysUserAdmin.setStoreid(userId);
+        		list = sysUserAdminService.selectSysUserAdminList(sysUserAdmin);
+        	}
+        }
+  
+        
+      
+		
+		startPage();
         return getDataTable(list);
     }
 

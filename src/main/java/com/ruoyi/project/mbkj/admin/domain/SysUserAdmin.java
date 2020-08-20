@@ -17,8 +17,30 @@ import com.ruoyi.framework.web.domain.BaseEntity;
 public class SysUserAdmin extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+    
+    
+    private String userId;
+    private String parentId;
+    
+	
 
-    /** id */
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	/** id */
     private Long id;
     
     /** 员工工号 */

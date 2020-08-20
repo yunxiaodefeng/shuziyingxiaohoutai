@@ -1,16 +1,19 @@
 package com.ruoyi.project.mbkj.admin.service.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.ruoyi.common.utils.text.Convert;
 import com.ruoyi.project.mbkj.admin.domain.SysUserAdmin;
 import com.ruoyi.project.mbkj.admin.domain.SysUserAdminBonus;
 import com.ruoyi.project.mbkj.admin.mapper.SysUserAdminMapper;
 import com.ruoyi.project.mbkj.admin.service.ISysUserAdminService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.ruoyi.project.mbkj.store.domain.SystemStore;
+import com.ruoyi.project.mbkj.store.mapper.SystemStoreMapper;
 
 /**
  * 员工管理Service业务层处理
@@ -23,6 +26,9 @@ public class SysUserAdminServiceImpl implements ISysUserAdminService
 {
     @Autowired
     private SysUserAdminMapper sysUserAdminMapper;
+    
+    @Autowired
+    private SystemStoreMapper systemStoreMapper;
 
     /**
      * 查询员工管理
@@ -102,5 +108,13 @@ public class SysUserAdminServiceImpl implements ISysUserAdminService
         map.put("storeid",userAdmin.getStoreid());
         map.put("username",userAdmin.getUsername());
         return sysUserAdminMapper.selectUserList(map);
+    }
+    
+    public List<SystemStore> selectStoreByParentId(String id){
+    	SystemStore systemStore = new SystemStore();
+    	systemStore.setPrentid(Long.parseLong(id));
+    	List<SystemStore> list = systemStoreMapper.selectSystemStoreList(systemStore);
+    	
+		return list;
     }
 }

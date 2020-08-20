@@ -2,6 +2,7 @@ package com.ruoyi.project.mbkj.admin.service;
 
 import com.ruoyi.project.mbkj.admin.domain.SysUserAdmin;
 import com.ruoyi.project.mbkj.admin.domain.SysUserAdminBonus;
+import com.ruoyi.project.mbkj.store.domain.SystemStore;
 
 import java.util.List;
 
@@ -62,4 +63,7 @@ public interface ISysUserAdminService
     public int deleteSysUserAdminById(Long id);
 
     List<SysUserAdminBonus> selectUserList(SysUserAdminBonus userAdmin);
+
+	public List<SystemStore> selectStoreByParentId(String parentId);
+
 }

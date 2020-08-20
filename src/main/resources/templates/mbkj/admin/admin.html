@@ -35,11 +35,13 @@
 			</div>
 		</div>
 	</div>
-     <div class="container-div">
+     <div class="ui-layout-center">
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
+                    	<input type="hidden" id="userId" value="83" name="userId">
+		                <input type="hidden" id="parentId"  name="parentId">
                         <ul>
                           	<li>
                                 <label>工号：</label>
@@ -72,11 +74,6 @@
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreatetime]"/>
                             </li> -->
                            
-                            
-                            <li>
-                                <label>所属网点：</label>
-                                <input type="text" name="name"/>
-                            </li>
                          	 <li>
                                 <label>岗位：</label>
                                  <select name="jobid">
@@ -164,61 +161,10 @@
 			$.tree.init(options);
 			
 			function zOnClick(event, treeId, treeNode) {
-				$("#deptId").val(treeNode.id);
+				$("#userId").val(treeNode.id);
 				$("#parentId").val(treeNode.pId);
 				
-				console.log(treeNode.id);
-				console.log(treeNode.pId);
-				treeNodePId = treeNode.pId;
-				treeNodeId = treeNode.id;
-				if(treeNode.pId == null){
-					$.ajax({
-		        		url:prefix + "/selectStoretarget",
-		        		type:"POST",
-		        		dataType:"Json",
-		        		data:{
-		        			"startTime":startTime,
-		        			"endTime":endTime
-		        		},
-		        		success:function(result){
-		        			console.log(result);
-		        			$("#body-item").empty("");
-		        			$("#body-item").append(result.data);
-		       				
-		        			
-		        			
-		        		}
-		        	})
-		        	
-		        	treeNodeId='';
-				}else{
-					if(treeNode.id == null){
-						alert("请先选择网点");
-						return;
-					}
-					$.ajax({
-		        		url:prefix + "/selectUsertarget",
-		        		type:"POST",
-		        		dataType:"Json",
-		        		data:{
-		        			"startTime":startTime,
-		        			"endTime":endTime,
-		        			'storeId':treeNode.id 
-		        		},
-		        		success:function(result){
-		        			console.log(result);
-		        			$("#body-item").empty("");
-		        			$("#body-item").append(result.data);
-		       				
-		        			
-		        		}
-		        	})
-		        	 
-		        	
-		        	
-				}
-				
-				
+				$.table.search();
 			}
 		}
 
@@ -229,7 +175,7 @@
    		        panehHidden = true;
    		    }
    			 $('body').layout({ initClosed: panehHidden, west__size: 185 });
-   		    queryUserList();
+   		   
    		    queryDeptTree();
    		    
    		    

@@ -349,7 +349,7 @@ var table = {
                     search.isAsc = params.order;
     		        return search;
     		    }
-    		    debugger
+    		   
     		    if($.common.isNotEmpty(tableId)){
     				$("#" + tableId).bootstrapTable('refresh', params);
     			} else{
